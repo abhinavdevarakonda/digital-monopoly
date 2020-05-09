@@ -142,12 +142,31 @@ P4.image = render
 P4.place(x=885,y=600,height = 20,width = 20)
 
 def buttons(PLACE):
-    #prop = Tk()
+    global picture_popup
+    picture_popup = Toplevel()
     image_load = Image.open('propertycards\\'+PLACE+'.png')
     Render = ImageTk.PhotoImage(image_load)
-    image_label = Label(root,image=Render)
+    image_label = Label(picture_popup,image=Render)
     image_label.image = Render
-    image_label.place(x = 480,y = 188)
+    image_label.pack()
+    for owner in list_of_players:
+        if PLACE in owner[2]:
+            if PLACE in places:
+                if property_state[places.index(PLACE)] == 'bought':
+                    Button(picture_popup,text = 'MORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
+                else:
+                    Button(picture_popup,text = 'UNMORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
+            elif PLACE in railroads:
+                if railroad_state[railroads.index(PLACE)] == 'bought':
+                    Button(picture_popup,text = 'MORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
+                else:
+                    Button(picture_popup,text = 'UNMORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
+            else:
+                if company_state[companies.index(PLACE)] == 'bought':
+                    Button(picture_popup,text = 'MORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
+                else:
+                    Button(picture_popup,text = 'UNMORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
+
     image_label.after(5000,lambda:image_label.destroy())
 #====================================================PURCHASING A PROP.=========================================================================
 def purchase(PLACE,current_player):
@@ -320,32 +339,70 @@ def rent(PLACE,current_player,rent_price):
 
         #
         def Destroy():
-            current_player[1] = current_player[1] - rent_price
-            owner[1] = owner[1] + rent_price
-            display()
-            rent_window.destroy()
+            if PLACE in places:
+                if property_state[places.index(PLACE)] == 'mortgaged':
+                    pass
+
+                else:
+                    current_player[1] = current_player[1] - rent_price
+                    owner[1] = owner[1] + rent_price
+                    display()
+                    rent_window.destroy()
+
+            if PLACE in railroads:
+                if railroad_state[railroads.index(PLACE)] == 'mortgaged':
+                    pass
+
+                else:
+                    current_player[1] = current_player[1] - rent_price
+                    owner[1] = owner[1] + rent_price
+                    display()
+                    rent_window.destroy()
+            if PLACE in companies:
+                if company_state[companies.index(PLACE)] == 'mortgaged':
+                    pass
+                else:
+                    current_player[1] = current_player[1] - rent_price
+                    owner[1] = owner[1] + rent_price
+                    display()
+                    rent_window.destroy()
         #    
         
         rent_window = Toplevel()
         rent_window.configure(bg = 'white')
         rent_window.title(current_player[0].upper()+"'S TURN!")
         if PLACE in places:
-            Label(rent_window,text = "THIS PROPERTY IS ALREADY OWNED BY "+owner[0].upper(),font = 'calibri 20 bold',bg = 'white',fg = 'orangered').pack()
-            Label(rent_window,text = " PAY "+str(rent_price)+"$"+" TO CONTINUE",font = 'calibri 18 bold',bg = 'white',fg = 'orangered').pack()
-            Label(rent_window,text = "BALANCE: "+str(current_player[1]),font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
-            Button(rent_window,text = 'OKAY',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
+            if property_state[places.index(PLACE)] == 'mortgaged':
+                Label(rent_window,text = "THIS PROPERTY IS MORTGAGED",font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
+                Label(rent_window,text = "PAY NOTHING",font = 'calibri 18 bold',bg = 'white',fg = 'black').pack()
+                Button(rent_window,text = 'yay',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
+            else:
+                Label(rent_window,text = "THIS PROPERTY IS ALREADY OWNED BY "+owner[0].upper(),font = 'calibri 20 bold',bg = 'white',fg = 'orangered').pack()
+                Label(rent_window,text = " PAY "+str(rent_price)+"$"+" TO CONTINUE",font = 'calibri 18 bold',bg = 'white',fg = 'orangered').pack()
+                Label(rent_window,text = "BALANCE: "+str(current_player[1]),font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
+                Button(rent_window,text = 'OKAY',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
 
         elif PLACE in railroads:
-            Label(rent_window,text = "THIS RAILROAD IS ALREADY OWNED BY "+owner[0].upper(),font = 'calibri 20 bold',bg = 'white',fg = 'orangered').pack()
-            Label(rent_window,text = " PAY "+str(rent_price)+"$"+" TO CONTINUE",font = 'calibri 18 bold',bg = 'white',fg = 'orangered').pack()
-            Label(rent_window,text = "BALANCE: "+str(current_player[1]),font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
-            Button(rent_window,text = 'OKAY',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
-        
+            if railroad_state[railroads.index(PLACE)] == 'mortgaged':
+                Label(rent_window,text = "THIS PROPERTY IS MORTGAGED",font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
+                Label(rent_window,text = "PAY NOTHING",font = 'calibri 18 bold',bg = 'white',fg = 'black').pack()
+                Button(rent_window,text = 'yay',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
+            else:
+                Label(rent_window,text = "THIS RAILROAD IS ALREADY OWNED BY "+owner[0].upper(),font = 'calibri 20 bold',bg = 'white',fg = 'orangered').pack()
+                Label(rent_window,text = " PAY "+str(rent_price)+"$"+" TO CONTINUE",font = 'calibri 18 bold',bg = 'white',fg = 'orangered').pack()
+                Label(rent_window,text = "BALANCE: "+str(current_player[1]),font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
+                Button(rent_window,text = 'OKAY',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
+            
         elif PLACE in companies:
-            Label(rent_window,text = "THIS COMPANY IS ALREADY OWNED BY "+owner[0].upper(),font = 'calibri 20 bold',bg = 'white',fg = 'orangered').pack()
-            Label(rent_window,text = " PAY "+str(rent_price)+"$"+" TO CONTINUE",font = 'calibri 18 bold',bg = 'white',fg = 'orangered').pack()
-            Label(rent_window,text = "BALANCE: "+str(current_player[1]),font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
-            Button(rent_window,text = 'OKAY',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
+            if company_state[companies.index(PLACE)] == 'mortgaged':
+                Label(rent_window,text = "THIS PROPERTY IS MORTGAGED",font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
+                Label(rent_window,text = "PAY NOTHING",font = 'calibri 18 bold',bg = 'white',fg = 'black').pack()
+                Button(rent_window,text = 'yay',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
+            else:
+                Label(rent_window,text = "THIS COMPANY IS ALREADY OWNED BY "+owner[0].upper(),font = 'calibri 20 bold',bg = 'white',fg = 'orangered').pack()
+                Label(rent_window,text = " PAY "+str(rent_price)+"$"+" TO CONTINUE",font = 'calibri 18 bold',bg = 'white',fg = 'orangered').pack()
+                Label(rent_window,text = "BALANCE: "+str(current_player[1]),font = 'calibri 20 bold',bg = 'white',fg = 'black').pack()
+                Button(rent_window,text = 'OKAY',command = Destroy,font = 'calibri 14 bold',bg = 'white',fg = 'black').pack()
 
         rent_window.mainloop()
         
@@ -359,7 +416,10 @@ def rent(PLACE,current_player,rent_price):
             if PLACE in owner[2]: 
                 #IF IT'S A PLACE
                 if PLACE in places:
-                    rent_popup(PLACE,current_player,owner,rent_price)
+                    if property_state[places.index(PLACE)] == 'mortgaged':
+                        rent_popup(PLACE,current_player,owner,0)
+                    else:
+                        rent_popup(PLACE,current_player,owner,rent_price)
 
                 #IF IT'S A RAILROAD
                 elif PLACE in railroads:
@@ -370,7 +430,10 @@ def rent(PLACE,current_player,rent_price):
                                 rent_multiple+=1
                             else:
                                 rent_multiple = rent_multiple*2
-                    rent_popup(PLACE,current_player,owner,(rent_price*rent_multiple))
+                    if railroad_state[railroads.index(PLACE)] == 'mortgaged':
+                        rent_popup(PLACE,current_player,owner,0)
+                    else:
+                        rent_popup(PLACE,current_player,owner,(rent_price*rent_multiple))
 
                 #IF IT'S A COMPANY
                 elif PLACE in companies:
@@ -380,41 +443,92 @@ def rent(PLACE,current_player,rent_price):
                         if i in owner[2]:
                             company_count  += 1
                     
+                    if company_state[companies.index(PLACE)] == 'mortgaged':
+                        rent_popup(PLACE,current_player,owner,0)
+
                     if company_count == 1:
                         rent_popup(PLACE,current_player,owner,dice*4)
                     
                     if company_count == 2:
                         rent_popup(PLACE,current_player,owner,dice*10)
 
-def mortgage(current_player):
-    if current_player[1] <= 0:
-        messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE NO MONEY LEFT!")
-    else:
-        messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE!")
-        pass
+def umortgage(current_player,PLACE):
+    pass
 
-    result = messagebox.askquestion(current_player[0]+"'s turn!","Do you want to mortgage a property?",type = yesno)
-    if result == "yes":
-        mortgage_window = Toplevel()
-        Label(mortgage_window,text = 'CHOOSE THE PROPERTY YOU WOULD LIKE TO MORTGAGE:').pack(side = TOP)
-        for props in current_player[2]:
-            load = Image.open("monopoly_player_icons\\"+props+".png")
-            render = ImageTk.PhotoImage(load)
-            prop = Button(mortgage_window,image=render,command = lambda:confirmed(prop,current_player))
-            prop.image = render
-            prop.pack(side = LEFT)
-    
-    def confirmed(prop,current_player):
+def mortgage(current_player,PLACE):
+    def confirmed(props,current_player):
+        mortgage_window.destroy()
         if props in places:
             property_state[places.index(props)] = 'mortgaged'
-            current_player[1] += place_price[places.index(prop)]
+            current_player[1] += place_price[places.index(props)]/2
+
         elif props in railroads:
             railroad_state[railroads.index(props)] = 'mortgaged'
-            current_player[1] += railroad_price[railroads.index(prop)]
+            current_player[1] += railroad_price[railroads.index(props)]/2
+
         else:
             company_state[companies.index(props)] = 'mortgaged'
-            current_player[1] += company_price[company.index(prop)]
+            current_player[1] += company_price[company.index(props)]/2
 
+            
+    if PLACE in order:
+        if PLACE in places:
+            if property_state[places.index(PLACE)] == 'mortgaged':
+                unmortgage(current_player,PLACE)
+            else:
+                pass
+        elif PLACE in railroads:
+            if railroad_state[railroads.index(PLACE)] == 'mortgaged':
+                unmortgage(current_player,PLACE)
+            else:
+                pass
+
+        else:
+            if company_state[companies.index(PLACE)] == 'mortgaged':
+                unmortgage(current_player,PLACE)
+            else:
+                pass 
+        picture_popup.destroy()
+        if list_of_players.index(current_player) <3:
+            current_player = list_of_players[list_of_players.index(current_player)+1]
+        else:
+            current_player = list_of_players[0]
+
+        if current_player[1] <= 0:
+            messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE NO MONEY LEFT!")
+            result = messagebox.askquestion(current_player[0]+"'s turn!","Do you want to mortgage a property?",type = 'yesno')
+            if result == "yes":
+                mortgage_window = Toplevel()
+                Label(mortgage_window,text = 'CHOOSE THE PROPERTY YOU WOULD LIKE TO MORTGAGE:').pack(side = TOP)
+                for props in current_player[2]:
+                    print('flag')
+                    load = Image.open("propertycards\\"+props+".png")
+                    render = ImageTk.PhotoImage(load)
+                    prop = Button(mortgage_window,image=render,command = lambda:confirmed(props,current_player))
+                    prop.image = render
+                    prop.pack(side = LEFT)
+                    messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
+        else:
+            messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
+            confirmed(PLACE,current_player)
+
+    else:
+        if list_of_players.index(current_player) <3:
+            current_player = list_of_players[list_of_players.index(current_player)+1]
+        else:
+            current_player = list_of_players[0]
+
+        result = messagebox.askquestion(current_player[0]+"'s turn!","Do you want to mortgage a property?",type = 'yesno')
+        if result == "yes":
+            mortgage_window = Toplevel()
+            Label(mortgage_window,text = 'CHOOSE THE PROPERTY YOU WOULD LIKE TO MORTGAGE:').pack(side = TOP)
+            for props in current_player[2]:
+                print('flag')
+                load = Image.open("propertycards\\"+props+".png")
+                render = ImageTk.PhotoImage(load)
+                prop = Button(mortgage_window,image=render,command = lambda:confirmed(props,current_player))
+                prop.image = render
+                prop.pack(side = LEFT)
 #==========================================================RENT=================================================================
 #=========================================================START=================================================================
 def start(n1):
@@ -482,115 +596,115 @@ def display_properties(x1,y1,i):
     f1.place(x=x1,y=y1,height=80,width=188)
         
     if places[0] in list_of_players[i][2]:
-        Label(f1,text="",bg="saddle brown",relief="solid",borderwidth=0.5).place(x=8,y=8,height=10,width=10)
+        Button(f1,text="",bg="saddle brown",relief="solid",borderwidth=0.5,command = lambda:buttons('MEDITERRANEAN AVENUE')).place(x=8,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=8,y=8,height=10,width=10)
     if places[1] in list_of_players[i][2]:
-        Label(f1,text="",bg="saddle brown",relief="solid",borderwidth=0.5).place(x=8,y=26,height=10,width=10)
+        Button(f1,text="",bg="saddle brown",relief="solid",borderwidth=0.5,command = lambda:buttons('BALTIC AVENUE')).place(x=8,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=8,y=26,height=10,width=10)
     if places[2] in list_of_players[i][2]:
-        Label(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5).place(x=26,y=8,height=10,width=10)
+        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:buttons('ORIENTAL AVENUE')).place(x=26,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=26,y=8,height=10,width=10)
     if places[3] in list_of_players[i][2]:
-        Label(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5).place(x=26,y=26,height=10,width=10)
+        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:buttons('VERMONT AVENUE')).place(x=26,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=26,y=26,height=10,width=10)
     if places[4] in list_of_players[i][2]:
-        Label(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5).place(x=26,y=44,height=10,width=10)
+        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:buttons('CONNECTICUT AVENUE')).place(x=26,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=26,y=44,height=10,width=10)
     if places[5] in list_of_players[i][2]:
-        Label(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5).place(x=44,y=8,height=10,width=10)
+        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:buttons('ST. CHARLES PLACE')).place(x=44,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=44,y=8,height=10,width=10)
     if places[6] in list_of_players[i][2]:
-        Label(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5).place(x=44,y=26,height=10,width=10)
+        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:buttons('STATES AVENUE')).place(x=44,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=44,y=26,height=10,width=10)
     if places[7] in list_of_players[i][2]:
-        Label(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5).place(x=44,y=44,height=10,width=10)
+        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:buttons('VIRGINIA AVENUE')).place(x=44,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=44,y=44,height=10,width=10)
     if places[8] in list_of_players[i][2]:
-        Label(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5).place(x=62,y=8,height=10,width=10)
+        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:buttons('ST. JAMES PLACE')).place(x=62,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=62,y=8,height=10,width=10)
     if places[9] in list_of_players[i][2]:
-        Label(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5).place(x=62,y=26,height=10,width=10)
+        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:buttons('TENNESSEE AVENUE')).place(x=62,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=62,y=26,height=10,width=10)
     if places[10] in list_of_players[i][2]:
-        Label(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5).place(x=62,y=44,height=10,width=10)
+        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:buttons('NEW YORK AVENUE')).place(x=62,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=62,y=44,height=10,width=10)
     if places[11] in list_of_players[i][2]:
-        Label(f1,text="",bg="red2",relief="solid",borderwidth=0.5).place(x=80,y=8,height=10,width=10)
+        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:buttons('KENTUCKY AVENUE')).place(x=80,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=80,y=8,height=10,width=10)
     if places[12] in list_of_players[i][2]:
-        Label(f1,text="",bg="red2",relief="solid",borderwidth=0.5).place(x=80,y=26,height=10,width=10)
+        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:buttons('INDIANA AVENUE')).place(x=80,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=80,y=26,height=10,width=10)
     if places[13] in list_of_players[i][2]:
-        Label(f1,text="",bg="red2",relief="solid",borderwidth=0.5).place(x=80,y=44,height=10,width=10)
+        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:buttons('ILLINOIS AVENUE')).place(x=80,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=80,y=44,height=10,width=10)
     if places[14] in list_of_players[i][2]:
-        Label(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5).place(x=98,y=8,height=10,width=10)
+        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:buttons('ATLANTIC AVENUE')).place(x=98,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=98,y=8,height=10,width=10)
     if places[15] in list_of_players[i][2]:
-        Label(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5).place(x=98,y=26,height=10,width=10)
+        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:buttons('VENTNOR AVENUE')).place(x=98,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=98,y=26,height=10,width=10)
     if places[16] in list_of_players[i][2]:
-        Label(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5).place(x=98,y=44,height=10,width=10)
+        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:buttons('MARVIN GARDENS')).place(x=98,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=98,y=44,height=10,width=10)
     if places[17] in list_of_players[i][2]:
-        Label(f1,text="",bg="forest green",relief="solid",borderwidth=0.5).place(x=116,y=8,height=10,width=10)
+        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:buttons('PACIFIC AVENUE')).place(x=116,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=116,y=8,height=10,width=10)
     if places[18] in list_of_players[i][2]:
-        Label(f1,text="",bg="forest green",relief="solid",borderwidth=0.5).place(x=116,y=26,height=10,width=10)
+        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:buttons('NORTH CAROLINA AVENUE')).place(x=116,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=116,y=26,height=10,width=10)
     if places[19] in list_of_players[i][2]:
-        Label(f1,text="",bg="forest green",relief="solid",borderwidth=0.5).place(x=116,y=44,height=10,width=10)
+        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:buttons('PENNSYLVANIA AVENUE')).place(x=116,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=116,y=44,height=10,width=10)
     if places[20] in list_of_players[i][2]:
-        Label(f1,text="",bg="dodgerblue3",relief="solid",borderwidth=0.5).place(x=134,y=8,height=10,width=10)
+        Button(f1,text="",bg="dodgerblue3",relief="solid",borderwidth=0.5,command = lambda:buttons('PARK PLACE')).place(x=134,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=134,y=8,height=10,width=10)
     if places[21] in list_of_players[i][2]:
-        Label(f1,text="",bg="dodgerblue3",relief="solid",borderwidth=0.5).place(x=134,y=26,height=10,width=10)
+        Button(f1,text="",bg="dodgerblue3",relief="solid",borderwidth=0.5,command = lambda:buttons('BOARDWALK')).place(x=134,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=134,y=26,height=10,width=10)
     if railroads[0] in list_of_players[i][2]:
-        Label(f1,text="",bg="grey10",relief="solid",borderwidth=0.5).place(x=152,y=8,height=10,width=10)
+        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:buttons('READING RAILROAD')).place(x=152,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=152,y=8,height=10,width=10)
     if railroads[1] in list_of_players[i][2]:
-        Label(f1,text="",bg="grey10",relief="solid",borderwidth=0.5).place(x=152,y=26,height=10,width=10)
+        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:buttons('PENNSYLVANIA RAILROAD')).place(x=152,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=152,y=26,height=10,width=10)
     if railroads[2] in list_of_players[i][2]:
-        Label(f1,text="",bg="grey10",relief="solid",borderwidth=0.5).place(x=152,y=44,height=10,width=10)
+        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:buttons('B&O RAILROAD')).place(x=152,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=152,y=44,height=10,width=10)
     if railroads[3] in list_of_players[i][2]:
-        Label(f1,text="",bg="grey10",relief="solid",borderwidth=0.5).place(x=152,y=62,height=10,width=10)
+        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:buttons('SHORT LINE')).place(x=152,y=62,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=152,y=62,height=10,width=10)
     if companies[0] in list_of_players[i][2]:
-        Label(f1,text="",bg="sandy brown",relief="solid",borderwidth=0.5).place(x=170,y=8,height=10,width=10)
+        Button(f1,text="",bg="sandy brown",relief="solid",borderwidth=0.5,command = lambda:buttons('ELECTRIC COMPANY')).place(x=170,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=170,y=8,height=10,width=10)
     if companies[1] in list_of_players[i][2]:
-        Label(f1,text="",bg="sandy brown",relief="solid",borderwidth=0.5).place(x=170,y=26,height=10,width=10)
+        Button(f1,text="",bg="sandy brown",relief="solid",borderwidth=0.5,command = lambda:buttons('WATER WORKS')).place(x=170,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=170,y=26,height=10,width=10)
     
@@ -681,7 +795,7 @@ Water_Works.place(x=749,y=48,height=20,width=46)
 
 
 Marvin_Gardens = Button(root,text = '',command = lambda:buttons('MARVIN GARDENS'),bg = 'yellow2',fg = 'black')
-Marvin_Gardens.place(x=795,y=48,height=20,width=46)
+Marvin_Gardens.place(x=795,y=48,height=20,width=46) 
 
 
 
@@ -829,7 +943,7 @@ Luxury_Tax.place(x=916,y=464,height=46,width=20)
 Boardwalk = Button(root,text = '',command = lambda:buttons('BOARDWALK'),bg = 'dodgerblue3',fg = 'black')
 Boardwalk.place(x=916,y=510,height=46,width=20)
 
-mortgage_button = Button(root,text = '',command = lambda:mortgage(current_player),bg = 'black',fg = 'white')
+mortgage_button = Button(root,text = '',command = lambda:mortgage(current_player,'not_a_place'),bg = 'black',fg = 'white')
 mortgage_button.place(x=0,y=0)
 #================================================ROW-3==================================================================#
 ######################################################################################################################################
@@ -919,7 +1033,7 @@ def running(button_clicks):
         if property_state[places.index(order[current_player[3]])] == 'sale':
             place(order[current_player[3]],current_player)
             
-        elif property_state[places.index(order[current_player[3]])] == 'bought' or property_state[places.index(order[current_player[3]])] == 'colour_set' or propert_state[places.index(order[current_player[3]])] == 'mortgaged' or property_state[places.index(order[current_player[3]])] in ['1','2','3','4','hotel']:
+        elif property_state[places.index(order[current_player[3]])] == 'bought' or property_state[places.index(order[current_player[3]])] == 'colour_set' or property_state[places.index(order[current_player[3]])] == 'mortgaged' or property_state[places.index(order[current_player[3]])] in ['1','2','3','4','hotel']:
             rent(order[current_player[3]],current_player,rent_prices_places[places.index(order[current_player[3]])])
     #RAILROADS
     elif order[current_player[3]] in railroads:
@@ -935,9 +1049,6 @@ def running(button_clicks):
 
         elif company_state[companies.index(order[current_player[3]])] == 'bought' or company_state[companies.index(order[current_player[3]])] == 'mortgaged':
             rent(order[current_player[3]],current_player,1)
-    
-    elif current_player[1] <=0:
-        mortgage(current_player)
 #
     #TAX
     if current_player[3] == 4 :
