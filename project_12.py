@@ -456,7 +456,7 @@ def umortgage(current_player,PLACE):
     pass
 
 def mortgage(current_player,PLACE):
-    def confirmed(props,current_player):
+    def confirmed(props,current_player,mortgage_window):
         mortgage_window.destroy()
         if props in places:
             property_state[places.index(props)] = 'mortgaged'
@@ -472,6 +472,7 @@ def mortgage(current_player,PLACE):
 
             
     if PLACE in order:
+        mortgage_window = Toplevel()
         if PLACE in places:
             if property_state[places.index(PLACE)] == 'mortgaged':
                 unmortgage(current_player,PLACE)
@@ -498,10 +499,9 @@ def mortgage(current_player,PLACE):
             messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE NO MONEY LEFT!")
             result = messagebox.askquestion(current_player[0]+"'s turn!","Do you want to mortgage a property?",type = 'yesno')
             if result == "yes":
-                mortgage_window = Toplevel()
+                #
                 Label(mortgage_window,text = 'CHOOSE THE PROPERTY YOU WOULD LIKE TO MORTGAGE:').pack(side = TOP)
                 for props in current_player[2]:
-                    print('flag')
                     load = Image.open("propertycards\\"+props+".png")
                     render = ImageTk.PhotoImage(load)
                     prop = Button(mortgage_window,image=render,command = lambda:confirmed(props,current_player))
@@ -510,9 +510,10 @@ def mortgage(current_player,PLACE):
                     messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
         else:
             messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
-            confirmed(PLACE,current_player)
+            confirmed(PLACE,current_player,mortgage_window)
 
     else:
+        mortgage_window = Toplevel()
         if list_of_players.index(current_player) <3:
             current_player = list_of_players[list_of_players.index(current_player)+1]
         else:
@@ -526,7 +527,7 @@ def mortgage(current_player,PLACE):
                 print('flag')
                 load = Image.open("propertycards\\"+props+".png")
                 render = ImageTk.PhotoImage(load)
-                prop = Button(mortgage_window,image=render,command = lambda:confirmed(props,current_player))
+                prop = Button(mortgage_window,image=render,command = lambda:confirmed(props,current_player,mortgage_window))
                 prop.image = render
                 prop.pack(side = LEFT)
 #==========================================================RENT=================================================================
@@ -1027,7 +1028,11 @@ def running(button_clicks):
         messagebox.showinfo(current_player[0]+"'s turn","COLLECT 200$")
         current_player[1] += 200
     #PASSING GO
-#
+    print(p1)
+    print(p2)
+    print(p3)
+    print(p4)
+    print(property_state)
     #PLACES
     if order[current_player[3]] in places:
         if property_state[places.index(order[current_player[3]])] == 'sale':
@@ -1056,11 +1061,7 @@ def running(button_clicks):
         
     elif current_player[3] == 38:
         tax(current_player,75)
-    print(p1)
-    print(p2)
-    print(p3)
-    print(p4)
-    print(property_state)
+    
     #TAX
 #running()
 #===============================================RUNNING=================================================================#
