@@ -166,8 +166,8 @@ def buttons(PLACE):
                     Button(picture_popup,text = 'MORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
                 else:
                     Button(picture_popup,text = 'UNMORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
-
-    image_label.after(5000,lambda:image_label.destroy())
+        else:
+            image_label.after(5000,lambda:image_label.destroy())
 #====================================================PURCHASING A PROP.=========================================================================
 def purchase(PLACE,current_player):
     current_player[2].append(PLACE)
@@ -206,7 +206,7 @@ def place(PLACE,current_player):
 
         def yes():
             purchase(PLACE,current_player)
-            property_available_window.destroy()
+            property_available_window.destroy() 
 
         def no():
             property_available_window.destroy()
@@ -452,10 +452,26 @@ def rent(PLACE,current_player,rent_price):
                     if company_count == 2:
                         rent_popup(PLACE,current_player,owner,dice*10)
 
-def umortgage(current_player,PLACE):
-    pass
+def unmortgage(current_player,PLACE):
+    result = messagebox.askquestion(current_player[0]+"'s turn!","are you sure you want to rebuy the property?",type = 'yesno')
+    if result == 'yes':
+        if PLACE in places:
+            property_state[places.index(PLACE)] = 'unmortgaged'
+            messagebox.showinfo(current_player[0]+"'s turn!","you must pay "+str(place_price[places.index(PLACE)]/2 + (place_price[places.index(PLACE)]/2)/10))
+            current_player[1] += place_price[places.index(PLACE)]/2 + (place_price[places.index(PLACE)]/2)/10
+        elif PLACE in railroads:
+            railroad_state[railroads.index(PLACE)] = 'unmortgaged'
+            messagebox.showinfo(current_player[0]+"'s turn!","you must pay "+str(railroad_price[railroads.index(PLACE)]/2 + (railroad_price[railroads.index(PLACE)]/2)/10))
+            current_player[1] += railroad_price[railroads.index(PLACE)]/2 + (railroad_price[railroads.index(PLACE)]/2)/10
+        else:
+            company_state[companies.index(PLACE)] = 'unmortgaged'
+            messagebox.showinfo(current_player[0]+"'s turn!","you must pay "+str(company_price[companies.index(PLACE)]/2 + (company_price[companies.index(PLACE)]/2)/10))
+            current_player[1] += company_price[companies.index(PLACE)]/2 + (company_price[companies.index(PLACE)]/2)/10
+
 
 def mortgage(current_player,PLACE):
+    picture_popup.destroy()
+    mortgage_window = Toplevel()
     def confirmed(props,current_player,mortgage_window):
         mortgage_window.destroy()
         if props in places:
@@ -468,27 +484,20 @@ def mortgage(current_player,PLACE):
 
         else:
             company_state[companies.index(props)] = 'mortgaged'
-            current_player[1] += company_price[company.index(props)]/2
+            current_player[1] += company_price[companies.index(props)]/2
 
             
     if PLACE in order:
-        mortgage_window = Toplevel()
+        
         if PLACE in places:
             if property_state[places.index(PLACE)] == 'mortgaged':
                 unmortgage(current_player,PLACE)
-            else:
-                pass
         elif PLACE in railroads:
             if railroad_state[railroads.index(PLACE)] == 'mortgaged':
                 unmortgage(current_player,PLACE)
-            else:
-                pass
-
         else:
             if company_state[companies.index(PLACE)] == 'mortgaged':
                 unmortgage(current_player,PLACE)
-            else:
-                pass 
         picture_popup.destroy()
         if list_of_players.index(current_player) <3:
             current_player = list_of_players[list_of_players.index(current_player)+1]
@@ -509,11 +518,21 @@ def mortgage(current_player,PLACE):
                     prop.pack(side = LEFT)
                     messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
         else:
-            messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
-            confirmed(PLACE,current_player,mortgage_window)
+            if PLACE in places:
+                if property_state[places.index(PLACE)] in ['bought','one','two','three','four','hotel']:
+                    messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
+                    confirmed(PLACE,current_player,mortgage_window)       
+            elif PLACE in railroads:
+                if railroad_state[railroads.index(PLACE)] in ['bought','one','two','three','four','hotel']:
+                    messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
+                    confirmed(PLACE,current_player,mortgage_window)
+            else:
+                if company_state[companies.index(PLACE)] in ['bought','one','two','three','four','hotel']:
+                    messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
+                    confirmed(PLACE,current_player,mortgage_window)
 
     else:
-        mortgage_window = Toplevel()
+        #mortgage_window = Toplevel()
         if list_of_players.index(current_player) <3:
             current_player = list_of_players[list_of_players.index(current_player)+1]
         else:
@@ -521,7 +540,7 @@ def mortgage(current_player,PLACE):
 
         result = messagebox.askquestion(current_player[0]+"'s turn!","Do you want to mortgage a property?",type = 'yesno')
         if result == "yes":
-            mortgage_window = Toplevel()
+           #mortgage_window = Toplevel()
             Label(mortgage_window,text = 'CHOOSE THE PROPERTY YOU WOULD LIKE TO MORTGAGE:').pack(side = TOP)
             for props in current_player[2]:
                 print('flag')
@@ -955,6 +974,13 @@ def run_call():
     button_clicks += 1
     if button_clicks > 4:
         button_clicks = 1
+    print(p1)
+    print(p2)
+    print(p3)
+    print(p4)
+    print(property_state)
+    print(railroad_state)
+    print(company_state)
     running(button_clicks)
     display()
 
@@ -1017,9 +1043,9 @@ def running(button_clicks):
     DICE.place(x=5000,y=5000)
     movement(current_player,dice)
     current_player[3] += dice
-    
-    
-    
+
+  
+   
     #DICE
 #
     #PASSING GO
@@ -1028,11 +1054,7 @@ def running(button_clicks):
         messagebox.showinfo(current_player[0]+"'s turn","COLLECT 200$")
         current_player[1] += 200
     #PASSING GO
-    print(p1)
-    print(p2)
-    print(p3)
-    print(p4)
-    print(property_state)
+    
     #PLACES
     if order[current_player[3]] in places:
         if property_state[places.index(order[current_player[3]])] == 'sale':
