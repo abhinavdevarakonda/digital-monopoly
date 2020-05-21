@@ -101,10 +101,11 @@ owned3 = []
 owned4 = []
 pos1,pos2,pos3,pos4 = (0,0,0,0)
 players = ['PLAYER 1','PLAYER 2','PLAYER 3','PLAYER 4']
-p1 = [players[0],money1, owned1, pos1]
-p2 = [players[1],money2, owned2, pos2]
-p3 = [players[2],money3, owned3, pos3]
-p4 = [players[3],money4, owned4, pos4]
+sets1,sets2,sets3,sets4 = [],[],[],[]
+p1 = [players[0],money1, owned1, pos1, sets1]
+p2 = [players[1],money2, owned2, pos2, sets2]
+p3 = [players[2],money3, owned3, pos3, sets3]
+p4 = [players[3],money4, owned4, pos4, sets4]
 list_of_players = [p1,p2,p3,p4] 
 
 
@@ -302,6 +303,13 @@ for rent in cursor_result:
 
     
 def house(PLACE,current_player):
+    if len(PLACE) > 0 :
+        for i in PLACE:
+            buttons(i)
+
+    else:
+        messsagebox.showinfo(current_player+"'s turn!","you don't have any colour sets to build a house!")
+
     if property_state[places.index(PLACE)] == 'colour_set':
         result = messagebox.askquestion("You have already purchased "+PLACE+"!","DO YOU WANT TO BUILD A HOUSE?",type = 'yesno')
         if result == 'yes':
@@ -333,6 +341,23 @@ def house(PLACE,current_player):
         
 #=========================================================HOUSE==========================================================================#    
 #########################################################################################################################################################
+def sets(current_player):
+    if colour_set_brown in current_player[2]:
+        current_player[4].append('brown')
+    elif colour_set_lightblue in current_player[2]:
+        current_player[4].append('lightblue')
+    elif colour_set_pink in current_player[2]:
+        current_player[4].append('pink')
+    elif colour_set_orange in current_player[2]:
+        current_player[4].append('orange')
+    elif colour_set_red in current_player[2]:
+        current_playe[4].append('red')
+    elif colour_set_yellow in current_player[2]:
+        current_player[4].append('yellow')
+    elif colour_set_green in current_player[2]:
+        curernt_player[4].append('green')
+    elif colour_set_blue in current_player[2]:
+        current_player[4].append('blue')
 #==========================================================RENT===========================================================================#
 def rent(PLACE,current_player,rent_price):
     def rent_popup(PLACE,current_player,owner,rent_price):
@@ -446,10 +471,10 @@ def rent(PLACE,current_player,rent_price):
                     if company_state[companies.index(PLACE)] == 'mortgaged':
                         rent_popup(PLACE,current_player,owner,0)
 
-                    if company_count == 1:
+                    elif company_count == 1:
                         rent_popup(PLACE,current_player,owner,dice*4)
                     
-                    if company_count == 2:
+                    elif company_count == 2:
                         rent_popup(PLACE,current_player,owner,dice*10)
 
 def unmortgage(current_player,PLACE):
@@ -470,11 +495,25 @@ def unmortgage(current_player,PLACE):
 
 
 def mortgage(current_player,PLACE):
-    picture_popup.destroy()
     mortgage_window = Toplevel()
     def confirmed(props,current_player,mortgage_window):
         mortgage_window.destroy()
         if props in places:
+            if property_state[places.index(props)] in ['1','2','3','4','hotel']:
+                result = messagebox.askquestion(current_player+"'s turn!","you have houses in this property! you must first sell the houses back at half price.")
+                if result == 'yes':
+                    if property_state[places.index(props)].isdigit():
+                        current_player[1] += ((house_price[places.index(props)])*int(property_state[places.index(props)]))/2
+                    else:
+                        current_player[1] += hotel_price[places.index(props)]/2
+
+            for Set in colour_set_list:
+                if props in Set:
+                    if set(Set).intersection(set(current_player[2])) == set(Set):
+                        for i in Set:
+                            rent_prices_places[places.index(i)] = rent_prices_places[places.index(i)]/2
+                            property_state[places.index(i)] = 'colour_set'
+
             property_state[places.index(props)] = 'mortgaged'
             current_player[1] += place_price[places.index(props)]/2
 
@@ -965,6 +1004,8 @@ Boardwalk.place(x=916,y=510,height=46,width=20)
 
 mortgage_button = Button(root,text = '',command = lambda:mortgage(current_player,'not_a_place'),bg = 'black',fg = 'white')
 mortgage_button.place(x=0,y=0)
+
+house_button = Button(root,text = '',command = lambda:house(current_player[4],current_player))
 #================================================ROW-3==================================================================#
 ######################################################################################################################################
 #===============================================RUNNING=================================================================#
@@ -1034,6 +1075,7 @@ def running(button_clicks):
     global clicked
     global current_player
     global dice
+    
     current_player = list_of_players[button_clicks -1] 
     #DICE
     die1 = random.randint(1,6)
@@ -1044,7 +1086,7 @@ def running(button_clicks):
     movement(current_player,dice)
     current_player[3] += dice
 
-  
+    sets(current_player)
    
     #DICE
 #
