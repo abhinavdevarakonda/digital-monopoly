@@ -304,13 +304,19 @@ for rent in cursor_result:
     
 def house(PLACE,current_player):
     if len(PLACE) > 0 :
+        house_window = Toplevel()
         for i in PLACE:
-            buttons(i)
+            for j in i:
+                image_load = Image.open('propertycards\\'+j+'.png')
+                Render = ImageTk.PhotoImage(image_load)
+                image_load = Button(house_window,image=Render,command = lambda:house_from_button(j))
+                image_load.image = Render
+                image_load.pack()
 
-    else:
-        messsagebox.showinfo(current_player+"'s turn!","you don't have any colour sets to build a house!")
+    elif len(PLACE) == 0:
+        messagebox.showinfo(current_player[0]+"'s turn!","you don't have any colour sets to build a house!")
 
-    if property_state[places.index(PLACE)] == 'colour_set':
+    elif property_state[places.index(PLACE)] == 'colour_set':
         result = messagebox.askquestion("You have already purchased "+PLACE+"!","DO YOU WANT TO BUILD A HOUSE?",type = 'yesno')
         if result == 'yes':
             if property_state[places.index(PLACE)].isdigit():
@@ -337,27 +343,72 @@ def house(PLACE,current_player):
                 if result == 'yes':
                     property_state[places.index(PLACE)] = '1'
                     rent_prices_places[places.index(PLACE)] = rent_1_house[places.index(PLACE)]
-                
+    
+    def house_from_button(PLACE):
+        result = messagebox.askquestion(current_player[0]+"'s turn!","are you sure you want to build a house in "+PLACE+"?")
+        if result == 'yes':
+            if property_state[places.index(PLACE)].isdigit():
+                result = messsagebox.askquestion("confirmation","The price of a house in "+PLACE+' is ' + str(house_price[places.index(PLACE)])+" Are you sure you want to buy a house?",type = 'yesno')
+                if result == 'yes':
+                     property_state[places.index(PLACE)]+= 1
+                     current_player[3] - house_price[places.index(PLACE)]
+
+                     if int(property_state[places.index(PLACE)]) == 5:
+                         property_state[places.index(PLACE)] = 'hotel'
+                         current_player[3] - hotel_price[places.index(PLACE)] #hotel_price
+                         
+                     elif int(property_state[places.index(PLACE)]) == 2:
+                         rent_prices_places[places.index(PLACE)] = rent_2_house[places.index(PLACE)]
+                         
+                     elif int(property_state[places.index(PLACE)]) == 3:
+                        rent_prices_places[places.index(PLACE)] = rent_3_house[places.index(PLACE)]
+
+                     elif int(property_state[places.index(PLACE)]) == 4:
+                        rent_prices_places[places.index(PLACE)] = rent_4_house[places.index(PLACE)]
+                                         
+            else:
+                result = messagebox.askquestion("confirmation","The price of a house in "+PLACE +" is "+str(house_price[places.index(PLACE)])+" Are you sure you want to buy a house?",type = 'yesno') 
+                if result == 'yes':
+                    property_state[places.index(PLACE)] = '1'
+                    rent_prices_places[places.index(PLACE)] = rent_1_house[places.index(PLACE)]
         
 #=========================================================HOUSE==========================================================================#    
 #########################################################################################################################################################
 def sets(current_player):
-    if colour_set_brown in current_player[2]:
+    colour_list = []
+    if set(colour_set_brown).intersection(set(current_player[2])) == set(colour_set_brown):
         current_player[4].append('brown')
-    elif colour_set_lightblue in current_player[2]:
+        colour_list.append(colour_set_brown)
+
+    if set(colour_set_lightblue).intersection(set(current_player[2])) == set(colour_set_lightblue):
         current_player[4].append('lightblue')
-    elif colour_set_pink in current_player[2]:
+        colour_list.append(colour_set_lightblue)
+    
+    if set(colour_set_lightblue).intersection(set(current_player[2])) == set(colour_set_pink):
         current_player[4].append('pink')
-    elif colour_set_orange in current_player[2]:
+        colour_list.append(colour_set_pink)
+    
+    if set(colour_set_lightblue).intersection(set(current_player[2])) == set(colour_set_orange):
         current_player[4].append('orange')
-    elif colour_set_red in current_player[2]:
+        colour_list.append(colour_set_orange)
+    
+    if set(colour_set_lightblue).intersection(set(current_player[2])) == set(colour_set_red):
         current_playe[4].append('red')
-    elif colour_set_yellow in current_player[2]:
+        colour_list.append(colour_set_red)
+    
+    if set(colour_set_lightblue).intersection(set(current_player[2])) == set(colour_set_yellow):
         current_player[4].append('yellow')
-    elif colour_set_green in current_player[2]:
+        colour_list.append(colour_set_yellow)
+    
+    if set(colour_set_lightblue).intersection(set(current_player[2])) == set(colour_set_green):
         curernt_player[4].append('green')
-    elif colour_set_blue in current_player[2]:
+        colour_list.append(colour_set_green)
+    
+    if set(colour_set_lightblue).intersection(set(current_player[2])) == set(colour_set_blue):
         current_player[4].append('blue')
+        colour_list.append(colour_set_blue)
+
+    house(colour_list,current_player)
 #==========================================================RENT===========================================================================#
 def rent(PLACE,current_player,rent_price):
     def rent_popup(PLACE,current_player,owner,rent_price):
@@ -1005,7 +1056,7 @@ Boardwalk.place(x=916,y=510,height=46,width=20)
 mortgage_button = Button(root,text = '',command = lambda:mortgage(current_player,'not_a_place'),bg = 'black',fg = 'white')
 mortgage_button.place(x=0,y=0)
 
-house_button = Button(root,text = '',command = lambda:house(current_player[4],current_player))
+house_button = Button(root,text = '',command = lambda:sets(current_player)).pack()
 #================================================ROW-3==================================================================#
 ######################################################################################################################################
 #===============================================RUNNING=================================================================#
@@ -1081,13 +1132,12 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
+    dice = 1
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     movement(current_player,dice)
     current_player[3] += dice
 
-    sets(current_player)
-   
     #DICE
 #
     #PASSING GO
