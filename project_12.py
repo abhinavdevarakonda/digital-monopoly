@@ -607,7 +607,7 @@ def house(PLACE,current_player):
 #=========================================================HOUSE==========================================================================#    
 #########################################################################################################################################################
 def sets(current_player):
-    if current_player == list_of_players[3]:
+    if current_player == len(p_name)-1:
         current_player = list_of_players[0]
     else:
         current_player = list_of_players[list_of_players.index(current_player) + 1]
@@ -845,15 +845,15 @@ def mortgage(current_player,PLACE):
                     messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
         else:
             if PLACE in places:
-                if property_state[places.index(PLACE)] in ['bought','one','two','three','four','hotel']:
+                if property_state[places.index(PLACE)] in ['bought','1','2','3','4','hotel']:
                     messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
                     confirmed(PLACE,current_player,mortgage_window)       
             elif PLACE in railroads:
-                if railroad_state[railroads.index(PLACE)] in ['bought','one','two','three','four','hotel']:
+                if railroad_state[railroads.index(PLACE)] in ['bought','1','2','3','4','hotel']:
                     messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
                     confirmed(PLACE,current_player,mortgage_window)
             else:
-                if company_state[companies.index(PLACE)] in ['bought','one','two','three','four','hotel']:
+                if company_state[companies.index(PLACE)] in ['bought','1','2','3','4','hotel']:
                     messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
                     confirmed(PLACE,current_player,mortgage_window)
 
@@ -1370,7 +1370,6 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
-    dice = 1
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     movement(current_player,dice)
