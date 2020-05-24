@@ -4,11 +4,223 @@ import random
 import time
 from PIL import Image,ImageTk
 import mysql.connector as myco
+import tkinter.font as font
+import tkinter.messagebox
+
 mydb = myco.connect(host = 'localhost',user = 'root',passwd = 'abhinav',database = 'monopoly')
 cur = mydb.cursor()
+root1=Tk()
+myFont=font.Font(size=15)
+var=StringVar()
+p_name=[]
+k=0
+
+def win1():
+    global root
+    root.destroy()
+    root=Tk()
+    root.geometry('800x800')
+    root.title('Monopoly')
+    root.configure(bg='black')
+
+def win():
+    global root1
+    root1.destroy()
+    root1=Tk()
+    root1.geometry('800x800')
+    root1.title('Monopoly')
+    root1.configure(bg='black')
+    
+    logo=Image.open('monopolylogo.jpg')
+    ren=ImageTk.PhotoImage(logo)
+    image=Label(root1,image=ren,borderwidth=0)
+    image.image=ren
+    image.pack(side="top",pady=10,anchor=CENTER)
+
+def home():
+    global root1
+    root1.destroy()
+    root1=Tk()
+    root1.geometry('800x800')
+    root1.title('Homepage')
+    root1.configure(bg='black')
+
+    logo=Image.open('monopolylogo.jpg')
+    ren=ImageTk.PhotoImage(logo)
+    image=Label(root1,image=ren,borderwidth=0)
+    image.image=ren
+    image.pack(side="top",pady=10,anchor=CENTER)
+    
+    myFont=font.Font(size=15)
+    label=Label(root1,textvariable=var,bg="black",fg="white")    
+    var.set("Select Number Of Players")
+
+    p1=Button(root1,text='2 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby2)
+    p2=Button(root1,text='3 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby3)
+    p3=Button(root1,text='4 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby4)
+
+    label.pack(side="top",anchor=CENTER)
+    label['font']=myFont
+
+    p1.pack(side="top",pady=10,anchor=CENTER)
+    p2.pack(side="top",pady=10,anchor=CENTER)
+    p3.pack(side="top",pady=10,anchor=CENTER)
+ 
+def lobby2():
+    global root1
+    global e1
+    global e2
+    global p_name
+    
+    var2=StringVar()
+    answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 2 players")
+    global myFont
+    if answer==True:
+        win()        
+        label=Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10)
+        label.pack(side="top",anchor=CENTER,pady=5)
+        e1=Entry(root1)
+        e1.pack(side="top",anchor=CENTER,pady=10)
+        label=Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10)
+        label.pack(side="top",anchor=CENTER,pady=5)
+        e2=Entry(root1)
+        e2.pack(side="top",anchor=CENTER,pady=10)
+        Button(root1,text="Submit",command=P_lobby2).pack(side="top",anchor=CENTER,pady=20)
+
+def lobby3():
+    global root1
+    global e1
+    global e2
+    global e3
+    global p_name
+
+    answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 3 players")
+    global myFont
+    if answer==True:
+        win()            
+        Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+        e1=Entry(root1)
+        e1.pack(side="top",anchor=CENTER,pady=10)
+        Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+        e2=Entry(root1)
+        e2.pack(side="top",anchor=CENTER,pady=10)
+        Label(root1,text="Enter player 3 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+        e3=Entry(root1)
+        e3.pack(side="top",anchor=CENTER,pady=10)
+        Button(root1,text="Submit",command=P_lobby3).pack(side="top",anchor=CENTER,pady=20)
+    
+def lobby4():
+    global root1
+    global e1
+    global e2
+    global e3
+    global e4
+    global p_name
+
+    answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 4 players")
+    global myFont
+    if answer==True:
+        win()
+        Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+        e1=Entry(root1)
+        e1.pack(side="top",anchor=CENTER,pady=10)
+        Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+        e2=Entry(root1)
+        e2.pack(side="top",anchor=CENTER,pady=10)
+        Label(root1,text="Enter player 3 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+        e3=Entry(root1)
+        e3.pack(side="top",anchor=CENTER,pady=10)
+        Label(root1,text="Enter player 4 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+        e4=Entry(root1)
+        e4.pack(side="top",anchor=CENTER,pady=10)
+        Button(root1,text="Submit",command=P_lobby4).pack(side="top",anchor=CENTER,pady=20)
+
+def P_lobby2():
+    global e1
+
+    global p_name   
+    player1=e1.get()
+    p_name.append(player1)
+
+    global e2    
+    player2=e2.get()
+    p_name.append(player2)
+    k=1
+    root1.destroy()
+
+def P_lobby3():
+    global e1
+
+    global p_name
+    player1=e1.get()
+    p_name.append(player1)
+
+    global e2
+    player2=e2.get()
+    p_name.append(player2)
+
+    global e3
+    player3=e3.get()
+    p_name.append(player3)
+    k=1
+    root1.destroy()
+
+def P_lobby4():
+    global root
+    global e1
+
+    global p_name
+    player1=e1.get()
+    p_name.append(player1)
+
+    global e2
+    player2=e2.get()
+    p_name.append(player2)
+
+    global e3
+    player3=e3.get()
+    p_name.append(player3)
+
+    global e4
+    player4=e4.get()
+    p_name.append(player4)
+    k=1
+    root1.destroy()
+
+def rules():
+    pass
+
+def accounts():
+    pass
+
+def history():
+    pass
+
+def about():
+    pass
+
+win()
+play=Button(root1,text='Play Game',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=home)
+rules=Button(root1,text='Rules',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=rules)
+accounts=Button(root1,text='Accounts',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=accounts)
+history=Button(root1,text='Game History',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=history)
+about=Button(root1,text='About the Game',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=about)
+
+play.pack(side="top",pady=10,anchor=CENTER)
+rules.pack(side="top",pady=10,anchor=CENTER)
+accounts.pack(side="top",pady=10,anchor=CENTER)
+history.pack(side="top",pady=10,anchor=CENTER)
+about.pack(side="top",pady=10,anchor=CENTER)
+
+root1.mainloop()
+
+
+
+
 root = Tk()
+win1()
 root.title('                                                                                                                                                                                                 MONOPOLY                                 ')
-root.configure(bg='lightcyan3')
+root.configure(bg='#36393e')
 root.geometry('1270x735')
 
 load = Image.open("monopoly_template.png")
@@ -100,17 +312,35 @@ owned2 = []
 owned3 = []
 owned4 = []
 pos1,pos2,pos3,pos4 = (0,0,0,0)
-players = ['PLAYER 1','PLAYER 2','PLAYER 3','PLAYER 4']
+
+players = []
+for i in p_name:
+    players.append(i)
+
 sets1,sets2,sets3,sets4 = [],[],[],[]
-p1 = [players[0],money1, owned1, pos1, sets1]
-p2 = [players[1],money2, owned2, pos2, sets2]
-p3 = [players[2],money3, owned3, pos3, sets3]
-p4 = [players[3],money4, owned4, pos4, sets4]
-list_of_players = [p1,p2,p3,p4] 
+list_of_players = []
+
+if len(p_name) == 2:
+    p1 = [players[0],money1, owned1, pos1, sets1]
+    p2 = [players[1],money2, owned2, pos2, sets2]
+    list_of_players = [p1,p2]
+
+elif len(p_name) == 3:
+    p1 = [players[0],money1, owned1, pos1, sets1]
+    p2 = [players[1],money2, owned2, pos2, sets2]
+    p3 = [players[2],money3, owned3, pos3, sets3]
+    list_of_players = [p1,p2,p3]
+
+else:
+    p1 = [players[0],money1, owned1, pos1, sets1]
+    p2 = [players[1],money2, owned2, pos2, sets2]
+    p3 = [players[2],money3, owned3, pos3, sets3]
+    p4 = [players[3],money4, owned4, pos4, sets4]
+    list_of_players = [p1,p2,p3,p4]
 
 
 
-p1_name,p2_name,p3_name,p4_name="a","b","c","d"  # names of players based on account/guest
+
 
 n=4  #no of players
 
@@ -305,13 +535,14 @@ for rent in cursor_result:
 def house(PLACE,current_player):
     if len(PLACE) > 0 :
         house_window = Toplevel()
+        Label(house_window,text = 'WHICH PROPERTY DO YOU WANT TO BUILD A HOUSE IN?').pack(side = TOP)
         for i in PLACE:
             for j in i:
                 image_load = Image.open('propertycards\\'+j+'.png')
                 Render = ImageTk.PhotoImage(image_load)
                 image_load = Button(house_window,image=Render,command = lambda:house_from_button(j))
                 image_load.image = Render
-                image_load.pack()
+                image_load.pack(side = LEFT)
 
     elif len(PLACE) == 0:
         messagebox.showinfo(current_player[0]+"'s turn!","you don't have any colour sets to build a house!")
@@ -345,6 +576,7 @@ def house(PLACE,current_player):
                     rent_prices_places[places.index(PLACE)] = rent_1_house[places.index(PLACE)]
     
     def house_from_button(PLACE):
+        house_window.destroy()
         result = messagebox.askquestion(current_player[0]+"'s turn!","are you sure you want to build a house in "+PLACE+"?")
         if result == 'yes':
             if property_state[places.index(PLACE)].isdigit():
@@ -673,7 +905,7 @@ def start(n1):
 def display():
     x=0
     y=0
-    for i in range(4):
+    for i in range(len(p_name)):
         if i == 0:
             player_color = 'firebrick2'
             x=40
@@ -690,23 +922,23 @@ def display():
             player_color = 'gold'
             x=1000
             y=370
-        p1_label=Label(root,text='PLAYER '+str(i+1),bg='lightcyan3',fg=player_color,font="TkDefaultFont 30 bold",anchor=W)
+        p1_label=Label(root,text=p_name[i],bg='#36393e',fg=player_color,font="TkDefaultFont 30 bold",anchor=W)
         p1_label.place(x=x,y=y,height=60,width=290)
 
-        p1_money_label=Label(root,text="Money - " + str(list_of_players[i][1]),bg='lightcyan3',fg=player_color,font="TkDefaultFont 12 bold",anchor=W)
+        p1_money_label=Label(root,text="Money - " + str(list_of_players[i][1]),bg='#36393e',fg=player_color,font="TkDefaultFont 12 bold",anchor=W)
         p1_money_label.place(x=x,y=y+70,height=30,width=290)
 
-        p1_location_label=Label(root,text="Location - " + order[(list_of_players[i][3])],bg='lightcyan3',fg=player_color,font="TkDefaultFont 12 bold",anchor=W)
+        p1_location_label=Label(root,text="Location - " + order[(list_of_players[i][3])],bg='#36393e',fg=player_color,font="TkDefaultFont 12 bold",anchor=W)
         p1_location_label.place(x=x,y=y+110,height=30,width=290)
 
-        p1_properties_label=Label(root,text="Properties Owned - "+str(len(list_of_players[i][2])),bg='lightcyan3',fg=player_color,font="TkDefaultFont 12 bold",anchor=W)
+        p1_properties_label=Label(root,text="Properties Owned - "+str(len(list_of_players[i][2])),bg='#36393e',fg=player_color,font="TkDefaultFont 12 bold",anchor=W)
         p1_properties_label.place(x=x,y=y+150,height=30,width=290)
 
         display_properties(x,y+190,i)
 
     
 def display_properties(x1,y1,i):
-    f1=Frame(root,bg="lightcyan3")
+    f1=Frame(root,bg="#36393e")
     f1.place(x=x1,y=y1,height=80,width=188)
         
     if places[0] in list_of_players[i][2]:
@@ -1068,8 +1300,9 @@ button_clicks = 0
 def run_call():
     global button_clicks
     button_clicks += 1
-    if button_clicks > 4:
+    if button_clicks > len(p_name):
         button_clicks = 1
+        '''
     print(p1)
     print(p2)
     print(p3)
@@ -1077,6 +1310,7 @@ def run_call():
     print(property_state)
     print(railroad_state)
     print(company_state)
+    '''
     running(button_clicks)
     display()
 
