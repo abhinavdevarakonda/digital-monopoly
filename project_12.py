@@ -375,6 +375,10 @@ def house(PLACE,current_player):
 #=========================================================HOUSE==========================================================================#    
 #########################################################################################################################################################
 def sets(current_player):
+    if current_player == list_of_players[3]:
+        current_player = list_of_players[0]
+    else:
+        current_player = list_of_players[list_of_players.index(current_player) + 1]
     colour_list = []
     if set(colour_set_brown).intersection(set(current_player[2])) == set(colour_set_brown):
         current_player[4].append('brown')
