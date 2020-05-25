@@ -1293,9 +1293,55 @@ mortgage_button = Button(root,text = '',command = lambda:mortgage(current_player
 mortgage_button.place(x=0,y=0)
 
 house_button = Button(root,text = '',command = lambda:sets(current_player)).pack()
+
+quit = Button(root,text = 'QUIT',command = lambda:quit(list_of_players,property_state,railroad_state,company_state),bg = 'red',fg = 'black').pack()
 #================================================ROW-3==================================================================#
 ######################################################################################################################################
 #===============================================RUNNING=================================================================#
+def quit(list_of_players,property_state,railroad_state,company_state):
+    global save_game_window
+    result = messagebox.askquestion('QUIT','DO YOU WISH TO SAVE THIS GAME?',type = 'yesno')
+    if result == 'yes':
+        save_game_window = Toplevel()
+        save_game_window.configure(bg = '#36393e')
+        
+        player_info_query = "create table if not exists PLAYER_INFO_1(PLAYER char(70),MONEY float,POSITION int)"
+        property_info_query = "create table if not exists PROPERTY_INFO_1(PLACE char(70),STATE char(70),HOLDER char(70))"
+
+        cur.execute(player_info_query)
+        cur.execute(property_info_query)
+
+        Button(save_game_window,text = 'SUBMIT',command = lambda:confirm_save(player_info_query,property_info_query)).pack()
+        
+
+    def confirm_save(player_info_query,property_info_query):
+        save_game_window.destroy()
+        for player in list_of_players:
+            query = "insert into PLAYER_INFO_1 values('{}',{},{})".format(player[0],player[1],player[3])
+            cur.execute(query)
+        mydb.commit()
+
+        for PLACE in order:
+            if PLACE in places:
+                for i in list_of_players:
+                    if PLACE in i[2]:
+                        query = "insert into PROPERTY_INFO_1 values('{}','{}','{}')".format(PLACE,property_state[places.index(PLACE)],i[0])
+                cur.execute(query)
+            
+            elif PLACE in railroads:
+                for i in list_of_players:
+                    if PLACE in i[2]:
+                        query = "insert into PROPERTY_INFO_1 values('{}','{}','{}')".format(PLACE,railroad_state[railroads.index(PLACE)],i[0])
+                cur.execute(query)
+
+            elif PLACE in companies:
+                for i in list_of_players:
+                    if PLACE in i[2]:
+                        query = "insert into PROPERTY_INFO_1 values('{}','{}','{}')".format(PLACE,company_state[companies.index(PLACE)],i[0])
+                cur.execute(query)
+        mydb.commit()
+#======================================================GAMESAVE====================================================================#
+
 button_clicks = 0
 def run_call():
     global button_clicks
