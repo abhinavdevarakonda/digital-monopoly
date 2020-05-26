@@ -13,8 +13,7 @@ root1=Tk()
 myFont=font.Font(size=15)
 var=StringVar()
 p_name=[]
-k=0
-
+k = 0
 def win1():
     global root
     root.destroy()
@@ -145,7 +144,6 @@ def P_lobby2():
     global e2    
     player2=e2.get()
     p_name.append(player2)
-    k=1
     root1.destroy()
 
 def P_lobby3():
@@ -162,7 +160,6 @@ def P_lobby3():
     global e3
     player3=e3.get()
     p_name.append(player3)
-    k=1
     root1.destroy()
 
 def P_lobby4():
@@ -184,13 +181,16 @@ def P_lobby4():
     global e4
     player4=e4.get()
     p_name.append(player4)
-    k=1
     root1.destroy()
 
 def rules():
     pass
 
-def accounts():
+def load():
+    global k 
+    k=1
+    root1.destroy()
+  
     pass
 
 def history():
@@ -202,19 +202,17 @@ def about():
 win()
 play=Button(root1,text='Play Game',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=home)
 rules=Button(root1,text='Rules',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=rules)
-accounts=Button(root1,text='Accounts',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=accounts)
+Load=Button(root1,text='Load',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=load)
 history=Button(root1,text='Game History',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=history)
 about=Button(root1,text='About the Game',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=about)
 
 play.pack(side="top",pady=10,anchor=CENTER)
 rules.pack(side="top",pady=10,anchor=CENTER)
-accounts.pack(side="top",pady=10,anchor=CENTER)
+Load.pack(side="top",pady=10,anchor=CENTER)
 history.pack(side="top",pady=10,anchor=CENTER)
 about.pack(side="top",pady=10,anchor=CENTER)
 
 root1.mainloop()
-
-
 
 
 root = Tk()
@@ -301,44 +299,141 @@ cur.execute('select HotelCost from properties')
 cursor_result = cur.fetchall()
 for price in cursor_result:
     hotel_price.append(int(price[0]))
+
+##################
+
+
+if k == 0:   
+    property_state = ['sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale']
+    railroad_state = ['sale','sale','sale','sale']
+    company_state = ['sale','sale']
+    landed = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    money1,money2,money3,money4 = (1500,1500,1500,1500)
+    owned1 = []
+    owned2 = []
+    owned3 = []
+    owned4 = []
+    pos1,pos2,pos3,pos4 = (0,0,0,0)
+
+    players = []
+    for i in p_name:
+        players.append(i)
+
+    sets1,sets2,sets3,sets4 = [],[],[],[]
+    list_of_players = []
+    if len(p_name) == 2:
+        p1 = [players[0],money1, owned1, pos1, sets1]
+        p2 = [players[1],money2, owned2, pos2, sets2]
+        list_of_players = [p1,p2]
+
+    elif len(p_name) == 3:
+        p1 = [players[0],money1, owned1, pos1, sets1]
+        p2 = [players[1],money2, owned2, pos2, sets2]
+        p3 = [players[2],money3, owned3, pos3, sets3]
+        list_of_players = [p1,p2,p3]
+
+    elif len(p_name) == 4:
+        p1 = [players[0],money1, owned1, pos1, sets1]
+        p2 = [players[1],money2, owned2, pos2, sets2]
+        p3 = [players[2],money3, owned3, pos3, sets3]
+        p4 = [players[3],money4, owned4, pos4, sets4]
+        list_of_players = [p1,p2,p3,p4]
+
+elif k == 1:
+    property_state = []
+    railroad_state = []
+    company_state = []
+    cur.execute('select PLAYER FROM PLAYER_INFO_1')
+    cursor_result = cur.fetchall()
+    for i in cursor_result:
+        p_name.append(i)
+
+    states = []
+    cur.execute('select STATE from PROPERTY_INFO_1')
+    cursor_result = cur.fetchall()
+    for i in cursor_result:
+        states.append(i)
+
+    for i in range(22):
+        property_state.append(states[i][0])
+
+    for i in range(22,25):
+        railroad_state.append(states[i][0])
+
+    company_state = [states[26][0],states[27][0]]
+
     
-property_state = ['sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale','sale']
-railroad_state = ['sale','sale','sale','sale']
-company_state = ['sale','sale']
-landed = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-money1,money2,money3,money4 = (1500,1500,1500,1500)
-owned1 = []
-owned2 = []
-owned3 = []
-owned4 = []
-pos1,pos2,pos3,pos4 = (0,0,0,0)
 
-players = []
-for i in p_name:
-    players.append(i)
+    
+    
+    player_names = []
+    cur.execute('select PLAYER from PLAYER_INFO_1')
+    cursor_result = cur.fetchall()
+    for i in cursor_result:
+        player_names.append(i[0])
+    print(player_names[0])
+    player_money = []
+    cur.execute('select MONEY from PLAYER_INFO_1')
+    cursor_result = cur.fetchall()
+    for i in cursor_result:
+        player_money.append(i[0])
 
-sets1,sets2,sets3,sets4 = [],[],[],[]
-list_of_players = []
+    position = []
+    cur.execute('select POSITION from PLAYER_INFO_1')
+    cursor_result = cur.fetchall()
+    for i in cursor_result:
+        position.append(i[0])       
+    
+    
+    owned = [[],[],[],[]]
+    query = "select PLACES from PROPERTY_INFO_1 WHERE HOLDER = '{}'".format(player_names[0])
+    cur.execute(query)
+    cursor_result = cur.fetchall()
+    for i in cursor_result:
+        owned[0].append(i[0])
+    print('1233453    ',owned)
+    query = "select PLACES from PROPERTY_INFO_1 WHERE HOLDER = '{}'".format(player_names[1])
+    cur.execute(query)
+    cursor_result = cur.fetchall()
+    for i in cursor_result:
+        owned[1].append(i[0])
 
-if len(p_name) == 2:
-    p1 = [players[0],money1, owned1, pos1, sets1]
-    p2 = [players[1],money2, owned2, pos2, sets2]
-    list_of_players = [p1,p2]
+    if len(p_name) == 3:
+        query = "select PLACES from PROPERTY_INFO_1 WHERE HOLDER = '{}'".format(player_names[2])
+        cur.execute(query)
+        for i in cursor_result:
+            owned[2].append(i[0])
 
-elif len(p_name) == 3:
-    p1 = [players[0],money1, owned1, pos1, sets1]
-    p2 = [players[1],money2, owned2, pos2, sets2]
-    p3 = [players[2],money3, owned3, pos3, sets3]
-    list_of_players = [p1,p2,p3]
+    if len(p_name) == 4:
+        query = "select PLACES from PROPERTY_INFO_1 WHERE HOLDER = '{}'".format(player_names[3])
+        cur.execute(query)
+        for i in cursor_result:
+            owned[3].append(i[0])
+    
 
-else:
-    p1 = [players[0],money1, owned1, pos1, sets1]
-    p2 = [players[1],money2, owned2, pos2, sets2]
-    p3 = [players[2],money3, owned3, pos3, sets3]
-    p4 = [players[3],money4, owned4, pos4, sets4]
-    list_of_players = [p1,p2,p3,p4]
+    cur.execute("select COUNT(*) from PLAYER_INFO_1")
+    no_of_players = cur.fetchall()
+    print('...',no_of_players[0][0])
 
+    sets1,sets2,sets3,sets4 = ['','','','']
+    print('sfdasdfasdfadsf       ',position)
+    if no_of_players[0][0] == 2:
+        p1 = [player_names[0],player_money[0], owned[0], position[0], sets1]
+        p2 = [player_names[1],player_money[1], owned[1], position[1], sets2]
+        list_of_players = [p1,p2] 
 
+    elif no_of_players[0][0] == 3:
+        p1 = [player_names[0],player_money[0], owned[0], position[0], sets1]
+        p2 = [player_names[1],player_money[1], owned[1], position[1], sets2]
+        p3 = [player_names[2],player_money[2], owned[2], position[2], sets3]
+        list_of_players = [p1,p2,p3]
+    
+    else:
+        p1 = [player_names[0],player_money[0], owned[0], position[0], sets1]
+        p2 = [player_names[1],player_money[1], owned[1], position[1], sets2]
+        p3 = [player_names[2],player_money[2], owned[2], position[2], sets3]
+        p4 = [player_names[3],player_money[3], owned[3], position[3], sets4]
+        list_of_players = [p1,p2,p3,p4]
 
 
 
@@ -373,6 +468,7 @@ P4.image = render
 P4.place(x=885,y=600,height = 20,width = 20)
 
 def buttons(PLACE):
+    global owner
     global picture_popup
     picture_popup = Toplevel()
     image_load = Image.open('propertycards\\'+PLACE+'.png')
@@ -445,6 +541,7 @@ def place(PLACE,current_player):
         property_available_window = Toplevel()
         
         if PLACE in places:
+            print('flag')
             for i in colour_set_list:
                 if PLACE in i:
                     COLOUR = colour[colour_set_list.index(i)]
@@ -1299,14 +1396,14 @@ quit = Button(root,text = 'QUIT',command = lambda:quit(list_of_players,property_
 ######################################################################################################################################
 #===============================================RUNNING=================================================================#
 def quit(list_of_players,property_state,railroad_state,company_state):
-    global save_game_window
+    global save_game_window   
     result = messagebox.askquestion('QUIT','DO YOU WISH TO SAVE THIS GAME?',type = 'yesno')
     if result == 'yes':
         save_game_window = Toplevel()
         save_game_window.configure(bg = '#36393e')
         
         player_info_query = "create table if not exists PLAYER_INFO_1(PLAYER char(70),MONEY float,POSITION int)"
-        property_info_query = "create table if not exists PROPERTY_INFO_1(PLACE char(70),STATE char(70),HOLDER char(70))"
+        property_info_query = "create table if not exists PROPERTY_INFO_1(PLACES char(70),STATE char(70),HOLDER char(70))"
 
         cur.execute(player_info_query)
         cur.execute(property_info_query)
@@ -1319,27 +1416,44 @@ def quit(list_of_players,property_state,railroad_state,company_state):
         for player in list_of_players:
             query = "insert into PLAYER_INFO_1 values('{}',{},{})".format(player[0],player[1],player[3])
             cur.execute(query)
-        mydb.commit()
+            mydb.commit()
+######
+        for PLACE in places:
+            query = "insert into PROPERTY_INFO_1(PLACES,STATE) values('{}','{}')".format(PLACE,property_state[places.index(PLACE)])
+            cur.execute(query)
+            mydb.commit()
 
-        for PLACE in order:
-            if PLACE in places:
-                for i in list_of_players:
-                    if PLACE in i[2]:
-                        query = "insert into PROPERTY_INFO_1 values('{}','{}','{}')".format(PLACE,property_state[places.index(PLACE)],i[0])
+        for player in list_of_players:
+            for PLACE in player[2]:
+                query = "update PROPERTY_INFO_1 set HOLDER = '{}' where PLACES = '{}'".format(player[0],PLACE)
                 cur.execute(query)
-            
-            elif PLACE in railroads:
-                for i in list_of_players:
-                    if PLACE in i[2]:
-                        query = "insert into PROPERTY_INFO_1 values('{}','{}','{}')".format(PLACE,railroad_state[railroads.index(PLACE)],i[0])
-                cur.execute(query)
+                mydb.commit()
+            print('a')
+        #
 
-            elif PLACE in companies:
-                for i in list_of_players:
-                    if PLACE in i[2]:
-                        query = "insert into PROPERTY_INFO_1 values('{}','{}','{}')".format(PLACE,company_state[companies.index(PLACE)],i[0])
+        for PLACE in railroads:
+            query = "insert into PROPERTY_INFO_1(PLACES,STATE) values('{}','{}')".format(PLACE,railroad_state[railroads.index(PLACE)])
+            cur.execute(query)
+            mydb.commit()
+
+        for player in list_of_players:
+            for PLACE in player[2]:
+                query = "update PROPERTY_INFO_1 set HOLDER = '{}' where PLACES = '{}'".format(player[0],PLACE)
                 cur.execute(query)
-        mydb.commit()
+                mydb.commit()
+
+
+        for PLACE in companies:
+            query = "insert into PROPERTY_INFO_1(PLACES,STATE) values('{}','{}')".format(PLACE,company_state[companies.index(PLACE)])
+            cur.execute(query)
+            mydb.commit()
+
+        for player in list_of_players:
+            for PLACE in player[2]:
+                query = "update PROPERTY_INFO_1 set HOLDER = '{}' where PLACES = '{}'".format(player[0],PLACE)
+                cur.execute(query)
+                mydb.commit()
+
 #======================================================GAMESAVE====================================================================#
 
 button_clicks = 0
@@ -1412,6 +1526,7 @@ def running(button_clicks):
     global dice
     
     current_player = list_of_players[button_clicks -1] 
+    print(current_player)
     #DICE
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
@@ -1432,6 +1547,8 @@ def running(button_clicks):
     
     #PLACES
     if order[current_player[3]] in places:
+        print('a')
+        print(property_state[places.index(order[current_player[3]])])
         if property_state[places.index(order[current_player[3]])] == 'sale':
             place(order[current_player[3]],current_player)
             
