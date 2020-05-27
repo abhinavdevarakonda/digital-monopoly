@@ -241,6 +241,7 @@ colour_set_blue = ['PARK PLACE','BOARDWALK']
 colour = ['salmon2','skyblue','hotpink1','orange','brown1','light goldenrod','green yellow','dodgerblue2']
 
 colour_set_list = [colour_set_brown,colour_set_lightblue,colour_set_pink,colour_set_orange,colour_set_red,colour_set_yellow,colour_set_green,colour_set_blue]
+place_colour = ['brown','lightblue','pink','orange','red','yellow','green','blue']
 
 order =  ['GO','MEDITERRANEAN AVENUE','COMMUNITY CHEST','BALTIC AVENUE','INCOME TAX','READING RAILROAD','ORIENTAL AVENUE','CHANCE','VERMONT AVENUE',
 
@@ -505,8 +506,10 @@ def purchase(PLACE,current_player):
                 if set(Set).intersection(set(current_player[2])) == set(Set):
                     for i in Set:
                         rent_prices_places[places.index(i)] = rent_prices_places[places.index(i)]*(2)
-                        messagebox.showinfo(current_player[0].upper()+"'S TURN!","ACHIEVED COLOUR SET FOR :"+i)
+                        
                         property_state[places.index(i)] = 'colour_set'
+
+                    messagebox.showinfo(current_player[0].upper()+"'S TURN!","ACHIEVED COLOUR SET FOR :"+place_colour[colour_set_list.index(Set)])
 
     elif PLACE in railroads:
         railroad_state[railroads.index(PLACE)] = 'bought'
@@ -626,15 +629,63 @@ for rent in cursor_result:
     
 def house(PLACE,current_player):
     if len(PLACE) > 0 :
+        print(PLACE)
+        properties=[]
+        p_state=[]
+        available_properties=[]
+        max_h = 0
+        temp_prop = []
+        for i in PLACE:
+            temp_prop=[]
+            prop=[]
+            p_state=[]
+            if i == colour_set_brown:
+                prop = colour_set_brown
+                p_state = property_state[0:2]
+            elif i == colour_set_lightblue:
+                prop = colour_set_lightblue
+                p_state = property_state[2:5]
+            elif i == colour_set_pink:
+                prop = colour_set_pink
+                p_state = property_state[5:8]
+            elif i == colour_set_orange:
+                prop = colour_set_orange
+                p_state = property_state[8:11]
+            elif i == colour_set_red:
+                prop = colour_set_red
+                p_state = property_state[11:14]
+            elif i == colour_set_yellow:
+                prop = colour_set_yellow
+                p_state = property_state[14:17]
+            elif i == colour_set_green:
+                prop = colour_set_green
+                p_state = property_state[17:20]
+            elif i == colour_set_blue:
+                prop = colour_set_blue
+                p_state = property_state[20:22]
+            max_h = max(p_state)
+            k=0
+            for j in prop:
+                m = p_state[k]
+                if m < max_h:
+                    temp_prop.append(j)
+                k+=1
+            if len(temp_prop) != 0:
+                for j in temp_prop:
+                    available_properties.append(j)
+            else:
+                for j in properties:
+                    available_properties.append(j)
+
         house_window = Toplevel()
         Label(house_window,text = 'WHICH PROPERTY DO YOU WANT TO BUILD A HOUSE IN?').pack(side = TOP)
-        for i in PLACE:
-            for j in i:
-                image_load = Image.open('propertycards\\'+j+'.png')
-                Render = ImageTk.PhotoImage(image_load)
-                image_load = Button(house_window,image=Render,command = lambda:house_from_button(j))
-                image_load.image = Render
-                image_load.pack(side = LEFT)
+        print(available_properties)
+        for j in available_properties:
+            image_load = Image.open('propertycards/'+j+'.png')
+            Render = ImageTk.PhotoImage(image_load)
+            image_load = Button(house_window,image=Render,command = lambda:house_from_button(j))
+            image_load.image = Render
+            image_load.pack(side = LEFT)
 
     elif len(PLACE) == 0:
         messagebox.showinfo(current_player[0]+"'s turn!","you don't have any colour sets to build a house!")
@@ -699,7 +750,7 @@ def house(PLACE,current_player):
 #=========================================================HOUSE==========================================================================#    
 #########################################################################################################################################################
 def sets(current_player):
-    if current_player == len(p_name)-1:
+    if current_player == list_of_players[len(p_name)-1]:
         current_player = list_of_players[0]
     else:
         current_player = list_of_players[list_of_players.index(current_player) + 1]
@@ -917,7 +968,7 @@ def mortgage(current_player,PLACE):
             if company_state[companies.index(PLACE)] == 'mortgaged':
                 unmortgage(current_player,PLACE)
         picture_popup.destroy()
-        if list_of_players.index(current_player) <3:
+        if list_of_players.index(current_player) < len(p_name)-1:
             current_player = list_of_players[list_of_players.index(current_player)+1]
         else:
             current_player = list_of_players[0]
@@ -1407,6 +1458,7 @@ def quit(list_of_players,property_state,railroad_state,company_state):
 
     def confirm_save(player_info_query,property_info_query):
         save_game_window.destroy()
+
         for player in list_of_players:
             query = "insert into PLAYER_INFO_1 values('{}',{},{})".format(player[0],player[1],player[3])
             cur.execute(query)
@@ -1455,15 +1507,14 @@ def run_call():
     button_clicks += 1
     if button_clicks > len(p_name):
         button_clicks = 1
-        '''
+    '''
     print(p1)
     print(p2)
     print(p3)
-    print(p4)
+    print(p4)'''
     print(property_state)
     print(railroad_state)
     print(company_state)
-    '''
     running(button_clicks)
     display()
 
@@ -1523,6 +1574,7 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
+    dice = 1
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     movement(current_player,dice)
