@@ -8,7 +8,7 @@ import tkinter.font as font
 import tkinter.messagebox
 
 mydb = myco.connect(host = 'localhost',user = 'root',passwd = 'abhinav',database = 'monopoly')
-cur = mydb.cursor()
+cur = mydb.cursor(buffered = True)
 root1=Tk()
 myFont=font.Font(size=15)
 var=StringVar()
@@ -371,7 +371,6 @@ elif k == 1:
     cursor_result = cur.fetchall()
     for i in cursor_result:
         player_names.append(i[0])
-    print(player_names[0])
     player_money = []
     cur.execute('select MONEY from PLAYER_INFO_1')
     cursor_result = cur.fetchall()
@@ -391,7 +390,6 @@ elif k == 1:
     cursor_result = cur.fetchall()
     for i in cursor_result:
         owned[0].append(i[0])
-    print('1233453    ',owned)
     query = "select PLACES from PROPERTY_INFO_1 WHERE HOLDER = '{}'".format(player_names[1])
     cur.execute(query)
     cursor_result = cur.fetchall()
@@ -404,19 +402,18 @@ elif k == 1:
         for i in cursor_result:
             owned[2].append(i[0])
 
-    if len(p_name) == 4:
+    elif len(p_name) == 4:
         query = "select PLACES from PROPERTY_INFO_1 WHERE HOLDER = '{}'".format(player_names[3])
         cur.execute(query)
         for i in cursor_result:
             owned[3].append(i[0])
-    
+
 
     cur.execute("select COUNT(*) from PLAYER_INFO_1")
     no_of_players = cur.fetchall()
-    print('...',no_of_players[0][0])
+
 
     sets1,sets2,sets3,sets4 = ['','','','']
-    print('sfdasdfasdfadsf       ',position)
     if no_of_players[0][0] == 2:
         p1 = [player_names[0],player_money[0], owned[0], position[0], sets1]
         p2 = [player_names[1],player_money[1], owned[1], position[1], sets2]
@@ -541,7 +538,6 @@ def place(PLACE,current_player):
         property_available_window = Toplevel()
         
         if PLACE in places:
-            print('flag')
             for i in colour_set_list:
                 if PLACE in i:
                     COLOUR = colour[colour_set_list.index(i)]
@@ -573,7 +569,6 @@ def place(PLACE,current_player):
         
         Button(property_available_window,text = 'YES',command = yes,height = 5,width = 23,font = 'calibri 14 bold',bg = 'white',fg = 'green').pack(side = LEFT)
         Button(property_available_window,text = 'NO',command = no,height = 5,width = 23,font = 'calibri 14 bold',bg = 'white',fg = 'red').pack(side = LEFT)
-        
         property_available_window.mainloop()
 
     #PLACE is the button of the current property
@@ -966,7 +961,6 @@ def mortgage(current_player,PLACE):
            #mortgage_window = Toplevel()
             Label(mortgage_window,text = 'CHOOSE THE PROPERTY YOU WOULD LIKE TO MORTGAGE:').pack(side = TOP)
             for props in current_player[2]:
-                print('flag')
                 load = Image.open("propertycards\\"+props+".png")
                 render = ImageTk.PhotoImage(load)
                 prop = Button(mortgage_window,image=render,command = lambda:confirmed(props,current_player,mortgage_window))
@@ -1428,7 +1422,6 @@ def quit(list_of_players,property_state,railroad_state,company_state):
                 query = "update PROPERTY_INFO_1 set HOLDER = '{}' where PLACES = '{}'".format(player[0],PLACE)
                 cur.execute(query)
                 mydb.commit()
-            print('a')
         #
 
         for PLACE in railroads:
@@ -1526,7 +1519,6 @@ def running(button_clicks):
     global dice
     
     current_player = list_of_players[button_clicks -1] 
-    print(current_player)
     #DICE
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
@@ -1547,8 +1539,6 @@ def running(button_clicks):
     
     #PLACES
     if order[current_player[3]] in places:
-        print('a')
-        print(property_state[places.index(order[current_player[3]])])
         if property_state[places.index(order[current_player[3]])] == 'sale':
             place(order[current_player[3]],current_player)
             
