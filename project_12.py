@@ -477,17 +477,17 @@ def buttons(PLACE):
     for owner in list_of_players:
         if PLACE in owner[2]:
             if PLACE in places:
-                if property_state[places.index(PLACE)] == 'bought':
+                if property_state[places.index(PLACE)] == 'bought' or property_state[places.index(PLACE)] in ['1','2','3','4','hotel','colour_set']:
                     Button(picture_popup,text = 'MORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
                 else:
                     Button(picture_popup,text = 'UNMORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
             elif PLACE in railroads:
-                if railroad_state[railroads.index(PLACE)] == 'bought':
+                if railroad_state[railroads.index(PLACE)] == 'bought' or railroad_state[railroads.index(PLACE)] in ['1','2','3','4','hotel','colour_set']:
                     Button(picture_popup,text = 'MORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
                 else:
                     Button(picture_popup,text = 'UNMORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
             else:
-                if company_state[companies.index(PLACE)] == 'bought':
+                if company_state[companies.index(PLACE)] == 'bought' or company_state[companies.index(PLACE)] in ['1','2','3','4','hotel','colour_set']:
                     Button(picture_popup,text = 'MORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
                 else:
                     Button(picture_popup,text = 'UNMORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
@@ -1447,6 +1447,15 @@ def quit(list_of_players,property_state,railroad_state,company_state):
         save_game_window = Toplevel()
         save_game_window.configure(bg = '#36393e')
         
+        cur.execute("select count(*) from information_schema.tables where table_name = '{}'".format('player_info_1'))
+        player_table = cur.fetchone()
+        cur.execute("select count(*) from information_schema.tables where table_name = '{}'".format('property_info_1'))
+        property_table = cur.fetchone()
+        if property_table[0] == 1 and player_table[0] == 1:
+            cur.execute("drop table PLAYER_INFO_1")
+            cur.execute("drop table PROPERTY_INFO_1")
+            mydb.commit()
+
         player_info_query = "create table if not exists PLAYER_INFO_1(PLAYER char(70),MONEY float,POSITION int)"
         property_info_query = "create table if not exists PROPERTY_INFO_1(PLACES char(70),STATE char(70),HOLDER char(70))"
 
@@ -1458,14 +1467,13 @@ def quit(list_of_players,property_state,railroad_state,company_state):
 
     def confirm_save(player_info_query,property_info_query):
         save_game_window.destroy()
-
         for player in list_of_players:
             query = "insert into PLAYER_INFO_1 values('{}',{},{})".format(player[0],player[1],player[3])
             cur.execute(query)
             mydb.commit()
 ######
         for PLACE in places:
-            query = "insert into PROPERTY_INFO_1(PLACES,STATE) values('{}','{}')".format(PLACE,property_state[places.index(PLACE)])
+            query = "insert into PROPERTY_INFO_1(PLACES,STATE) values('{}','{}')".format(PLACE,property_state[places.index(PLACE)]) 
             cur.execute(query)
             mydb.commit()
 
