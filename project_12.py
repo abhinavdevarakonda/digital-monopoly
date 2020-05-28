@@ -1002,7 +1002,7 @@ def mortgage(current_player,PLACE):
 
     else:
         #mortgage_window = Toplevel()
-        if list_of_players.index(current_player) <3:
+        if list_of_players.index(current_player) < len(p_name)-1:
             current_player = list_of_players[list_of_players.index(current_player)+1]
         else:
             current_player = list_of_players[0]
@@ -1431,39 +1431,19 @@ Luxury_Tax.place(x=916,y=464,height=46,width=20)
 Boardwalk = Button(root,text = '',command = lambda:buttons('BOARDWALK'),bg = 'dodgerblue3',fg = 'black')
 Boardwalk.place(x=916,y=510,height=46,width=20)
 
-mortgage_button = Button(root,text = '',command = lambda:mortgage(current_player,'not_a_place'),bg = 'black',fg = 'white')
-mortgage_button.place(x=0,y=0)
+mortgage_button = Button(root,text = 'MORTGAGE',command = lambda:mortgage(current_player,'not_a_place'),bg = 'black',fg = 'white')
+mortgage_button.place(x=473,y=685,height=20,width=40)
 
-house_button = Button(root,text = '',command = lambda:sets(current_player)).pack()
+house_button = Button(root,text = 'BUY A HOUSE',command = lambda:sets(current_player))
+house_button.place(x=550,y=685,height=20,width=40)
 
-quit = Button(root,text = 'QUIT',command = lambda:quit(list_of_players,property_state,railroad_state,company_state),bg = 'red',fg = 'black').pack()
+quit = Button(root,text = 'QUIT',command = lambda:quit(list_of_players,property_state,railroad_state,company_state),bg = 'red',fg = 'black')
+quit.place(x = 1230,y = 0)
 #================================================ROW-3==================================================================#
 ######################################################################################################################################
 #===============================================RUNNING=================================================================#
 def quit(list_of_players,property_state,railroad_state,company_state):
-    global save_game_window   
-    result = messagebox.askquestion('QUIT','DO YOU WISH TO SAVE THIS GAME?',type = 'yesno')
-    if result == 'yes':
-        save_game_window = Toplevel()
-        save_game_window.configure(bg = '#36393e')
-        
-        cur.execute("select count(*) from information_schema.tables where table_name = '{}'".format('player_info_1'))
-        player_table = cur.fetchone()
-        cur.execute("select count(*) from information_schema.tables where table_name = '{}'".format('property_info_1'))
-        property_table = cur.fetchone()
-        if property_table[0] == 1 and player_table[0] == 1:
-            cur.execute("drop table PLAYER_INFO_1")
-            cur.execute("drop table PROPERTY_INFO_1")
-            mydb.commit()
-
-        player_info_query = "create table if not exists PLAYER_INFO_1(PLAYER char(70),MONEY float,POSITION int)"
-        property_info_query = "create table if not exists PROPERTY_INFO_1(PLACES char(70),STATE char(70),HOLDER char(70))"
-
-        cur.execute(player_info_query)
-        cur.execute(property_info_query)
-
-        Button(save_game_window,text = 'SUBMIT',command = lambda:confirm_save(player_info_query,property_info_query)).pack()
-        
+    global save_game_window
 
     def confirm_save(player_info_query,property_info_query):
         save_game_window.destroy()
@@ -1506,6 +1486,42 @@ def quit(list_of_players,property_state,railroad_state,company_state):
                 query = "update PROPERTY_INFO_1 set HOLDER = '{}' where PLACES = '{}'".format(player[0],PLACE)
                 cur.execute(query)
                 mydb.commit()
+   
+
+
+    result = messagebox.askquestion('QUIT','DO YOU WISH TO SAVE THIS GAME?',type = 'yesno')
+    if result == 'yes':
+        root.destroy()
+        save_game_window = Toplevel()
+        save_game_window.configure(bg = '#36393e')
+        
+        cur.execute("select count(*) from information_schema.tables where table_name = '{}'".format('player_info_1'))
+        player_table = cur.fetchone()
+        cur.execute("select count(*) from information_schema.tables where table_name = '{}'".format('property_info_1'))
+        property_table = cur.fetchone()
+        if property_table[0] == 1 and player_table[0] == 1:
+            cur.execute("drop table PLAYER_INFO_1")
+            cur.execute("drop table PROPERTY_INFO_1")
+            mydb.commit()
+
+        player_info_query = "create table if not exists PLAYER_INFO_1(PLAYER char(70),MONEY float,POSITION int)"
+        property_info_query = "create table if not exists PROPERTY_INFO_1(PLACES char(70),STATE char(70),HOLDER char(70))"
+
+        cur.execute(player_info_query)
+        cur.execute(property_info_query)
+
+        result = messagebox.askquestion('CONFIRMATION','DO YOU WANT TO SAVE?')
+        if result == 'yes':
+            confirm_save(player_info_query,property_info_query)
+        else:
+            root.destroy() 
+
+    def confirm_save(player_info_query,property_info_query):
+        save_game_window.destroy()
+        for player in list_of_players:
+            query = "insert into PLAYER_INFO_1 values('{}',{},{})".format(player[0],player[1],player[3])
+            cur.execute(query)
+            mydb.commit()
 
 #======================================================GAMESAVE====================================================================#
 
