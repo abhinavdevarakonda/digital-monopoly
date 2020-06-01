@@ -191,6 +191,11 @@ def load():
     root1.destroy()
     pass
 
+def rules():
+    pass
+
+def about():
+    pass
 
 win()
 img()
@@ -200,7 +205,7 @@ t2='''HOW TO
 PLAY'''
 
 newgame=Button(root1,text='NEW GAME',padx=35,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=home)
-continuegame=Button(root1,text='CONTINUE GAME',padx=16,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=continuegame)
+continuegame=Button(root1,text='CONTINUE GAME',padx=16,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=load)
 rules=Button(root1,text=t2,padx=4,pady=10,width=13,borderwidth=0,font='Bahnschrift 10',bg='white',fg='purple',command=rules)
 about=Button(root1,text=t1,padx=4,pady=15,width=12,borderwidth=0,font='Bahnschrift 10',bg='white',fg='blue',command=about)
 
