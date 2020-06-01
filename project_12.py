@@ -7,7 +7,7 @@ import mysql.connector as myco
 import tkinter.font as font
 import tkinter.messagebox
 
-mydb = myco.connect(host = 'localhost',user = 'root',passwd = 'abhinav',database = 'monopoly')
+mydb = myco.connect(host = 'localhost',user = 'root',passwd = 'root',database = 'monopoly')
 cur = mydb.cursor(buffered = True)
 root1=Tk()
 myFont=font.Font(size=15)
@@ -30,11 +30,13 @@ def win():
     root1.title('Monopoly')
     root1.configure(bg='black')
     
-    logo=Image.open('monopolylogo.jpg')
-    ren=ImageTk.PhotoImage(logo)
+def img():
+    load=Image.open('newhome.png')
+    ren=ImageTk.PhotoImage(load)
     image=Label(root1,image=ren,borderwidth=0)
     image.image=ren
-    image.pack(side="top",pady=10,anchor=CENTER)
+    image.pack(side='top',anchor=CENTER)
+ 
 
 def home():
     global root1
@@ -183,34 +185,29 @@ def P_lobby4():
     p_name.append(player4)
     root1.destroy()
 
-def rules():
-    pass
-
 def load():
     global k 
     k=1
     root1.destroy()
-  
     pass
 
-def history():
-    pass
-
-def about():
-    pass
 
 win()
-play=Button(root1,text='Play Game',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=home)
-rules=Button(root1,text='Rules',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=rules)
-Load=Button(root1,text='Load',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=load)
-history=Button(root1,text='Game History',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=history)
-about=Button(root1,text='About the Game',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=about)
+img()
+t1='''ABOUT THE
+CREATORS'''
+t2='''HOW TO 
+PLAY'''
 
-play.pack(side="top",pady=10,anchor=CENTER)
-rules.pack(side="top",pady=10,anchor=CENTER)
-Load.pack(side="top",pady=10,anchor=CENTER)
-history.pack(side="top",pady=10,anchor=CENTER)
-about.pack(side="top",pady=10,anchor=CENTER)
+newgame=Button(root1,text='NEW GAME',padx=35,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=home)
+continuegame=Button(root1,text='CONTINUE GAME',padx=16,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=continuegame)
+rules=Button(root1,text=t2,padx=4,pady=10,width=13,borderwidth=0,font='Bahnschrift 10',bg='white',fg='purple',command=rules)
+about=Button(root1,text=t1,padx=4,pady=15,width=12,borderwidth=0,font='Bahnschrift 10',bg='white',fg='blue',command=about)
+
+newgame.place(x=371,y=118)
+continuegame.place(x=375,y=174)
+about.place(x=725,y=136)
+rules.place(x=727,y=283) 
 
 root1.mainloop()
 
