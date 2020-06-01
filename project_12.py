@@ -509,7 +509,7 @@ def purchase(PLACE,current_player):
                         
                         property_state[places.index(i)] = 'colour_set'
 
-                    messagebox.showinfo(current_player[0].upper()+"'S TURN!","ACHIEVED COLOUR SET FOR :"+place_colour[colour_set_list.index(Set)])
+                    messagebox.showinfo(current_player[0].upper()+"'S TURN!","ACHIEVED COLOUR SET FOR :"+place_colour[colour_set_list.index(Set)].upper())
 
     elif PLACE in railroads:
         railroad_state[railroads.index(PLACE)] = 'bought'
