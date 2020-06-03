@@ -411,8 +411,7 @@ elif k == 1:
         for i in cursor_result:
             owned[3].append(i[0])
 
-    for i in owned:
-        print(i)
+
 
     cur.execute("select COUNT(*) from PLAYER_INFO_1")
     no_of_players = cur.fetchall()
@@ -1614,8 +1613,6 @@ def running(button_clicks):
     #PASSING GO
     
     #PLACES
-    print(order[current_player[3]])
-    print(places)
     if order[current_player[3]] in places:
         if property_state[places.index(order[current_player[3]])] == 'sale':
             place(order[current_player[3]],current_player)
@@ -1644,8 +1641,6 @@ def running(button_clicks):
         
     elif current_player[3] == 38:
         tax(current_player,75)
-    print(order[current_player[3]])
-    print(railroads)
     #TAX
 #running()
 #===============================================RUNNING=================================================================#
