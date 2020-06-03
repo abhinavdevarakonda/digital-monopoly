@@ -38,10 +38,10 @@ mydb.commit()
 #table for railroads
 
 cur.execute('create table Railroads (Railroad char(40), OneRailRoad int, TwoRailRoads int, ThreeRailRoads int, FourRailRoads int, Mortgage int)')
-cur.execute('insert into Railroads values("Reading RailRoad",25,50,100,200,100)')
-cur.execute('insert into Railroads values("Pennsylvania RailRoad",25,50,100,200,100)')
-cur.execute('insert into Railroads values("B. & O. RailRoad",25,50,100,200,100)')
-cur.execute('insert into Railroads values("Short Line RailRoad",25,50,100,200,100)')
+cur.execute('insert into Railroads values("READING RAIROAD",25,50,100,200,100)')
+cur.execute('insert into Railroads values("PENNSYLVANIA RAILROAD",25,50,100,200,100)')
+cur.execute('insert into Railroads values("B&O RAILROAD",25,50,100,200,100)')
+cur.execute('insert into Railroads values("SHORT LINE",25,50,100,200,100)')
 mydb.commit()
 
 
