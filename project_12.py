@@ -411,6 +411,8 @@ elif k == 1:
         for i in cursor_result:
             owned[3].append(i[0])
 
+    for i in owned:
+        print(i)
 
     cur.execute("select COUNT(*) from PLAYER_INFO_1")
     no_of_players = cur.fetchall()
@@ -1512,11 +1514,7 @@ def quit(list_of_players,property_state,railroad_state,company_state):
         cur.execute(player_info_query)
         cur.execute(property_info_query)
 
-        result = messagebox.askquestion('CONFIRMATION','DO YOU WANT TO SAVE?')
-        if result == 'yes':
-            confirm_save(player_info_query,property_info_query)
-        else:
-            root.destroy() 
+        confirm_save(player_info_query,property_info_query)
 
     def confirm_save(player_info_query,property_info_query):
         save_game_window.destroy()
@@ -1600,7 +1598,7 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
-    dice = 1
+    dice = 12
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     movement(current_player,dice)
@@ -1616,6 +1614,8 @@ def running(button_clicks):
     #PASSING GO
     
     #PLACES
+    print(order[current_player[3]])
+    print(places)
     if order[current_player[3]] in places:
         if property_state[places.index(order[current_player[3]])] == 'sale':
             place(order[current_player[3]],current_player)
@@ -1623,8 +1623,9 @@ def running(button_clicks):
         elif property_state[places.index(order[current_player[3]])] == 'bought' or property_state[places.index(order[current_player[3]])] == 'colour_set' or property_state[places.index(order[current_player[3]])] == 'mortgaged' or property_state[places.index(order[current_player[3]])] in ['1','2','3','4','hotel']:
             rent(order[current_player[3]],current_player,rent_prices_places[places.index(order[current_player[3]])])
     #RAILROADS
+
     elif order[current_player[3]] in railroads:
-        if railroad_state[railroads.index(order[current_player[3]])] == 'sale' :
+        if railroad_state[railroads.index(order[current_player[3]])] == 'sale':
             place(order[current_player[3]],current_player)
             
         elif railroad_state[railroads.index(order[current_player[3]])] == 'bought' or railroad_state[railroads.index(order[current_player[3]])] == 'mortgaged':
@@ -1643,7 +1644,8 @@ def running(button_clicks):
         
     elif current_player[3] == 38:
         tax(current_player,75)
-    
+    print(order[current_player[3]])
+    print(railroads)
     #TAX
 #running()
 #===============================================RUNNING=================================================================#
