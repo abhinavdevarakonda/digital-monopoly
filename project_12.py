@@ -632,7 +632,6 @@ for rent in cursor_result:
     
 def house(PLACE,current_player):
     if len(PLACE) > 0 :
-        print(PLACE)
         properties=[]
         p_state=[]
         available_properties=[]
@@ -682,7 +681,6 @@ def house(PLACE,current_player):
 
         house_window = Toplevel()
         Label(house_window,text = 'WHICH PROPERTY DO YOU WANT TO BUILD A HOUSE IN?').pack(side = TOP)
-        print(available_properties)
         for j in available_properties:
             image_load = Image.open('propertycards/'+j+'.png')
             Render = ImageTk.PhotoImage(image_load)
@@ -1629,8 +1627,6 @@ def running(button_clicks):
         elif company_state[companies.index(order[current_player[3]])] == 'bought' or company_state[companies.index(order[current_player[3]])] == 'mortgaged':
             rent(order[current_player[3]],current_player,1)
 #
-    print(railroads)
-    print(order[current_player[3]])
     #TAX
     if current_player[3] == 4 :
         tax(current_player,200)
