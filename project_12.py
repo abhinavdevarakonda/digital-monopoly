@@ -1514,7 +1514,8 @@ def quit(list_of_players,property_state,railroad_state,company_state):
         cur.execute(property_info_query)
 
         confirm_save(player_info_query,property_info_query)
-
+    else:
+        root.destroy()
     def confirm_save(player_info_query,property_info_query):
         save_game_window.destroy()
         for player in list_of_players:
@@ -1530,14 +1531,7 @@ def run_call():
     button_clicks += 1
     if button_clicks > len(p_name):
         button_clicks = 1
-    '''
-    print(p1)
-    print(p2)
-    print(p3)
-    print(p4)'''
-    print(property_state)
-    print(railroad_state)
-    print(company_state)
+
     running(button_clicks)
     display()
 
@@ -1597,7 +1591,7 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
-    dice = 12
+    dice = 5
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     movement(current_player,dice)
@@ -1619,12 +1613,12 @@ def running(button_clicks):
             
         elif property_state[places.index(order[current_player[3]])] == 'bought' or property_state[places.index(order[current_player[3]])] == 'colour_set' or property_state[places.index(order[current_player[3]])] == 'mortgaged' or property_state[places.index(order[current_player[3]])] in ['1','2','3','4','hotel']:
             rent(order[current_player[3]],current_player,rent_prices_places[places.index(order[current_player[3]])])
-    #RAILROADS
 
+    #RAILROADS
     elif order[current_player[3]] in railroads:
         if railroad_state[railroads.index(order[current_player[3]])] == 'sale':
             place(order[current_player[3]],current_player)
-            
+    
         elif railroad_state[railroads.index(order[current_player[3]])] == 'bought' or railroad_state[railroads.index(order[current_player[3]])] == 'mortgaged':
             rent(order[current_player[3]],current_player,rent_prices_railroads[railroads.index(order[current_player[3]])])
     #COMPANIES
@@ -1635,6 +1629,8 @@ def running(button_clicks):
         elif company_state[companies.index(order[current_player[3]])] == 'bought' or company_state[companies.index(order[current_player[3]])] == 'mortgaged':
             rent(order[current_player[3]],current_player,1)
 #
+    print(railroads)
+    print(order[current_player[3]])
     #TAX
     if current_player[3] == 4 :
         tax(current_player,200)
