@@ -14,6 +14,8 @@ myFont=font.Font(size=15)
 var=StringVar()
 p_name=[]
 k = 0
+in_jail = 0
+prisoner = []
 def win1():
     global root
     root.destroy()
@@ -1227,15 +1229,7 @@ def tax(current_player,tax_amount):
 #======================================================TAX========================================================================#
 ################################################################################################################################################
 #===================================================GO TO JAIL=====================================================================#
-def jail(current_player):
-     pass
-#===================================================GO TO JAIL=====================================================================#
-################################################################################################################################################
-#======================================================JAIL========================================================================#
-def JAIL(current_player):
-    pass
-#======================================================JAIL========================================================================#
-#################################################################################################################################################
+#################################################################################################################################
 #=======================================================ROW-1=====================================================================#
 #these labels/places are in order of the board from free parking as top right in the board
 Free_Parking = Button(root,text = '',command = lambda:parking(current_player),bg = 'thistle3',fg = 'black')
@@ -1533,6 +1527,24 @@ def run_call():
     running(button_clicks)
     display()
 
+def jail(player):
+    global prisoner
+    global turn_count
+    prisoner = []
+    messagebox.showinfo(player[0]+"'s turn",'you have landed in jail!')
+    result = messagebox.askquestion(player[0]+"'s turn","do you want to bail out?",type = 'yesno')
+    if result == 'no':
+        turn_count = 0
+        prisoner.append(player)
+
+        if current_player == p1:
+            P1.place(x=coordinates[10][0],y=coordinates[10][1])
+        elif current_player == p2:
+            P2.place(x=coordinates[10][0],y=coordinates[10][1])
+        elif current_player == p2:
+            P3.place(x=coordinates[10][0],y=coordinates[10][1])
+        elif current_player == p4:
+            P4.place(x=coordinates[10][0],y=coordinates[10][1])
 
 def movement(current_player,dice):
     if current_player == p1:
@@ -1584,16 +1596,22 @@ def running(button_clicks):
     global current_player
     global dice
     
-    current_player = list_of_players[button_clicks -1] 
+    current_player = list_of_players[button_clicks-1] 
     #DICE
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
-    dice = 5
+    dice = 10
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
-    movement(current_player,dice)
-    current_player[3] += dice
+    if current_player in prisoner:
+        turn_count += 1
+        if turn_count == 3:
+            movement(current_player,dice)
+            current_player[3] += dice
+    else:        
+        movement(current_player,dice)
+        current_player[3] += dice
 
     #DICE
 #
@@ -1602,8 +1620,12 @@ def running(button_clicks):
         current_player[3] -=40
         messagebox.showinfo(current_player[0]+"'s turn","COLLECT 200$")
         current_player[1] += 200
+    
     #PASSING GO
     
+    if order[current_player[3]] == 'GO TO JAIL':
+        jail(current_player)
+
     #PLACES
     if order[current_player[3]] in places:
         if property_state[places.index(order[current_player[3]])] == 'sale':
@@ -1627,6 +1649,9 @@ def running(button_clicks):
         elif company_state[companies.index(order[current_player[3]])] == 'bought' or company_state[companies.index(order[current_player[3]])] == 'mortgaged':
             rent(order[current_player[3]],current_player,1)
 #
+    
+
+
     #TAX
     if current_player[3] == 4 :
         tax(current_player,200)
@@ -1639,7 +1664,6 @@ def running(button_clicks):
 dice_image = ImageTk.PhotoImage(file = 'dice_image.png')
 DICE = Button(root,image=dice_image,command = lambda:run_call(),bg = 'black')
 DICE.place(x = 565,y = 326)
-#GUYS THIS IS WHERE THE ACTUAL PLAYING STARTS OKAY
 root.mainloop()
 #
 
