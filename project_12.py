@@ -28,7 +28,7 @@ def win():
     global root1
     root1.destroy()
     root1=Tk()
-    root1.geometry('800x800')
+    root1.geometry('1000x400')
     root1.title('Monopoly')
     root1.configure(bg='black')
     
