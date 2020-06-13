@@ -16,6 +16,7 @@ p_name=[]
 k = 0
 in_jail = 0
 prisoner = []
+turn_count = 0
 def win1():
     global root
     root.destroy()
@@ -1601,10 +1602,13 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
-    dice = 10
+    dice = 30
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
+    print('prisoner....',prisoner)
+    print('current player....',current_player)
     if current_player in prisoner:
+        print('a')
         turn_count += 1
         if turn_count == 3:
             movement(current_player,dice)
