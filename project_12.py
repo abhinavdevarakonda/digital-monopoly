@@ -17,6 +17,7 @@ k = 0
 in_jail = 0
 prisoner = []
 turn_count = 0
+
 def win1():
     global root
     root.destroy()
@@ -25,205 +26,212 @@ def win1():
     root.title('Monopoly')
     root.configure(bg='black')
 
-def win():
-    global root1
-    root1.destroy()
-    root1=Tk()
-    root1.geometry('1000x400')
-    root1.title('Monopoly')
-    root1.configure(bg='black')
+def base():
+    def win():
+        global root1
+        root1.destroy()
+        root1=Tk()
+        root1.geometry('1000x400')
+        root1.title('Monopoly')
+        root1.configure(bg='black')
+        
+    def img():
+        load=Image.open('newhome.png')
+        ren=ImageTk.PhotoImage(load)
+        image=Label(root1,image=ren,borderwidth=0)
+        image.image=ren
+        image.pack(side='top',anchor=CENTER)
+
+    def home():
+        global root1
+        root1.destroy()
+        root1=Tk()
+        root1.geometry('800x800')
+        root1.title('Homepage')
+        root1.configure(bg='black')
+
+        logo=Image.open('monopolylogo.jpg')
+        ren=ImageTk.PhotoImage(logo)
+        image=Label(root1,image=ren,borderwidth=0)
+        image.image=ren
+        image.pack(side="top",pady=10,anchor=CENTER)
+        
+        myFont=font.Font(size=15)
+        label=Label(root1,textvariable=var,bg="black",fg="white")    
+        var.set("Select Number Of Players")
+
+        p1=Button(root1,text='2 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby2)
+        p2=Button(root1,text='3 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby3)
+        p3=Button(root1,text='4 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby4)
+
+        label.pack(side="top",anchor=CENTER)
+        label['font']=myFont
+
+        p1.pack(side="top",pady=10,anchor=CENTER)
+        p2.pack(side="top",pady=10,anchor=CENTER)
+        p3.pack(side="top",pady=10,anchor=CENTER)
     
-def img():
-    load=Image.open('newhome.png')
-    ren=ImageTk.PhotoImage(load)
-    image=Label(root1,image=ren,borderwidth=0)
-    image.image=ren
-    image.pack(side='top',anchor=CENTER)
- 
+    def lobby2():
+        global root1
+        global e1
+        global e2
+        global p_name
+        
+        var2=StringVar()
+        answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 2 players")
+        global myFont
+        if answer==True:
+            win()        
+            label=Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10)
+            label.pack(side="top",anchor=CENTER,pady=5)
+            e1=Entry(root1)
+            e1.pack(side="top",anchor=CENTER,pady=10)
+            label=Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10)
+            label.pack(side="top",anchor=CENTER,pady=5)
+            e2=Entry(root1)
+            e2.pack(side="top",anchor=CENTER,pady=10)
+            Button(root1,text="Submit",command=P_lobby2).pack(side="top",anchor=CENTER,pady=20)
 
-def home():
-    global root1
-    root1.destroy()
-    root1=Tk()
-    root1.geometry('800x800')
-    root1.title('Homepage')
-    root1.configure(bg='black')
+    def lobby3():
+        global root1
+        global e1
+        global e2
+        global e3
+        global p_name
 
-    logo=Image.open('monopolylogo.jpg')
-    ren=ImageTk.PhotoImage(logo)
-    image=Label(root1,image=ren,borderwidth=0)
-    image.image=ren
-    image.pack(side="top",pady=10,anchor=CENTER)
-    
-    myFont=font.Font(size=15)
-    label=Label(root1,textvariable=var,bg="black",fg="white")    
-    var.set("Select Number Of Players")
+        answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 3 players")
+        global myFont
+        if answer==True:
+            win()            
+            Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+            e1=Entry(root1)
+            e1.pack(side="top",anchor=CENTER,pady=10)
+            Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+            e2=Entry(root1)
+            e2.pack(side="top",anchor=CENTER,pady=10)
+            Label(root1,text="Enter player 3 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+            e3=Entry(root1)
+            e3.pack(side="top",anchor=CENTER,pady=10)
+            Button(root1,text="Submit",command=P_lobby3).pack(side="top",anchor=CENTER,pady=20)
+        
+    def lobby4():
+        global root1
+        global e1
+        global e2
+        global e3
+        global e4
+        global p_name
 
-    p1=Button(root1,text='2 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby2)
-    p2=Button(root1,text='3 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby3)
-    p3=Button(root1,text='4 Players',padx=50,pady=20,bg='black',fg="white",borderwidth=0,command=lobby4)
+        answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 4 players")
+        global myFont
+        if answer==True:
+            win()
+            Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+            e1=Entry(root1)
+            e1.pack(side="top",anchor=CENTER,pady=10)
+            Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+            e2=Entry(root1)
+            e2.pack(side="top",anchor=CENTER,pady=10)
+            Label(root1,text="Enter player 3 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+            e3=Entry(root1)
+            e3.pack(side="top",anchor=CENTER,pady=10)
+            Label(root1,text="Enter player 4 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
+            e4=Entry(root1)
+            e4.pack(side="top",anchor=CENTER,pady=10)
+            Button(root1,text="Submit",command=P_lobby4).pack(side="top",anchor=CENTER,pady=20)
 
-    label.pack(side="top",anchor=CENTER)
-    label['font']=myFont
+    def P_lobby2():
+        global e1
 
-    p1.pack(side="top",pady=10,anchor=CENTER)
-    p2.pack(side="top",pady=10,anchor=CENTER)
-    p3.pack(side="top",pady=10,anchor=CENTER)
- 
-def lobby2():
-    global root1
-    global e1
-    global e2
-    global p_name
-    
-    var2=StringVar()
-    answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 2 players")
-    global myFont
-    if answer==True:
-        win()        
-        label=Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10)
-        label.pack(side="top",anchor=CENTER,pady=5)
-        e1=Entry(root1)
-        e1.pack(side="top",anchor=CENTER,pady=10)
-        label=Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10)
-        label.pack(side="top",anchor=CENTER,pady=5)
-        e2=Entry(root1)
-        e2.pack(side="top",anchor=CENTER,pady=10)
-        Button(root1,text="Submit",command=P_lobby2).pack(side="top",anchor=CENTER,pady=20)
+        global p_name   
+        player1=e1.get()
+        p_name.append(player1)
 
-def lobby3():
-    global root1
-    global e1
-    global e2
-    global e3
-    global p_name
+        global e2    
+        player2=e2.get()
+        p_name.append(player2)
+        root1.destroy()
 
-    answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 3 players")
-    global myFont
-    if answer==True:
-        win()            
-        Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
-        e1=Entry(root1)
-        e1.pack(side="top",anchor=CENTER,pady=10)
-        Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
-        e2=Entry(root1)
-        e2.pack(side="top",anchor=CENTER,pady=10)
-        Label(root1,text="Enter player 3 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
-        e3=Entry(root1)
-        e3.pack(side="top",anchor=CENTER,pady=10)
-        Button(root1,text="Submit",command=P_lobby3).pack(side="top",anchor=CENTER,pady=20)
-    
-def lobby4():
-    global root1
-    global e1
-    global e2
-    global e3
-    global e4
-    global p_name
+    def P_lobby3():
+        global e1
 
-    answer=tkinter.messagebox.askyesno(title="Confirmation", message="You have selected 4 players")
-    global myFont
-    if answer==True:
-        win()
-        Label(root1,text="Enter player 1 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
-        e1=Entry(root1)
-        e1.pack(side="top",anchor=CENTER,pady=10)
-        Label(root1,text="Enter player 2 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
-        e2=Entry(root1)
-        e2.pack(side="top",anchor=CENTER,pady=10)
-        Label(root1,text="Enter player 3 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
-        e3=Entry(root1)
-        e3.pack(side="top",anchor=CENTER,pady=10)
-        Label(root1,text="Enter player 4 name",bg="black",fg="white",font=myFont,pady=10).pack(side="top",anchor=CENTER,pady=5)
-        e4=Entry(root1)
-        e4.pack(side="top",anchor=CENTER,pady=10)
-        Button(root1,text="Submit",command=P_lobby4).pack(side="top",anchor=CENTER,pady=20)
+        global p_name
+        player1=e1.get()
+        p_name.append(player1)
 
-def P_lobby2():
-    global e1
+        global e2
+        player2=e2.get()
+        p_name.append(player2)
 
-    global p_name   
-    player1=e1.get()
-    p_name.append(player1)
+        global e3
+        player3=e3.get()
+        p_name.append(player3)
+        root1.destroy()
 
-    global e2    
-    player2=e2.get()
-    p_name.append(player2)
-    root1.destroy()
+    def P_lobby4():
+        global root
+        global e1
 
-def P_lobby3():
-    global e1
+        global p_name
+        player1=e1.get()
+        p_name.append(player1)
 
-    global p_name
-    player1=e1.get()
-    p_name.append(player1)
+        global e2
+        player2=e2.get()
+        p_name.append(player2)
 
-    global e2
-    player2=e2.get()
-    p_name.append(player2)
+        global e3
+        player3=e3.get()
+        p_name.append(player3)
 
-    global e3
-    player3=e3.get()
-    p_name.append(player3)
-    root1.destroy()
+        global e4
+        player4=e4.get()
+        p_name.append(player4)
+        root1.destroy()
 
-def P_lobby4():
-    global root
-    global e1
+    def load():
+        global k 
+        k=1
+        root1.destroy()
+        pass
 
-    global p_name
-    player1=e1.get()
-    p_name.append(player1)
+    def rules():
+        about_window = Toplevel()
+        load=Image.open('rules.png')
+        render=ImageTk.PhotoImage(load)
+        image=Label(about_window,image=render,borderwidth=0)
+        image.image=render
+        image.pack(side='top',anchor=CENTER)
 
-    global e2
-    player2=e2.get()
-    p_name.append(player2)
+    def about():
+        about_window = Toplevel()
+        load=Image.open('about.png')
+        render=ImageTk.PhotoImage(load)
+        image=Label(about_window,image=render,borderwidth=0)
+        image.image=render
+        image.pack(side='top',anchor=CENTER)
+        
+    win()
+    img()
 
-    global e3
-    player3=e3.get()
-    p_name.append(player3)
-
-    global e4
-    player4=e4.get()
-    p_name.append(player4)
-    root1.destroy()
-
-def load():
-    global k 
-    k=1
-    root1.destroy()
-    pass
-
-def rules():
-    pass
-
-def about():
-    about_window = Toplevel()
-    load=Image.open('about_us.png')
-    render=ImageTk.PhotoImage(load)
-    image=Label(about_window,image=render,borderwidth=0)
-    image.image=render
-    image.pack(side='top',anchor=CENTER)
-
-win()
-img()
-t1='''ABOUT THE
+    t1='''ABOUT THE
 CREATORS'''
-t2='''HOW TO 
+    t2='''HOW TO 
 PLAY'''
 
-newgame=Button(root1,text='NEW GAME',padx=35,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=home)
-continuegame=Button(root1,text='CONTINUE GAME',padx=16,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=load)
-rules=Button(root1,text=t2,padx=4,pady=10,width=13,borderwidth=0,font='Bahnschrift 10',bg='white',fg='purple',command=rules)
-about=Button(root1,text=t1,padx=4,pady=15,width=12,borderwidth=0,font='Bahnschrift 10',bg='white',fg='blue',command=about)
+    newgame=Button(root1,text='NEW GAME',padx=35,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=home)
+    continuegame=Button(root1,text='CONTINUE GAME',padx=16,pady=8,borderwidth=0,font='Bahnschrift 10',bg='white',fg='red',command=load)
+    rules=Button(root1,text=t2,padx=4,pady=10,width=13,borderwidth=0,font='Bahnschrift 10',bg='white',fg='purple',command=rules)
+    about=Button(root1,text=t1,padx=4,pady=15,width=12,borderwidth=0,font='Bahnschrift 10',bg='white',fg='blue',command=about)
 
-newgame.place(x=371,y=118)
-continuegame.place(x=375,y=174)
-about.place(x=725,y=136)
-rules.place(x=727,y=283) 
+    newgame.place(x=371,y=118)
+    continuegame.place(x=375,y=174)
+    about.place(x=725,y=136)
+    rules.place(x=727,y=283)
 
-root1.mainloop()
+    root1.mainloop()
 
+base()
 
 root = Tk()
 win1()
