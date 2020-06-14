@@ -1596,6 +1596,7 @@ def movement(current_player,dice):
         display()
 
 def running(button_clicks):
+    global turn_count
     global clicked
     global current_player
     global dice
