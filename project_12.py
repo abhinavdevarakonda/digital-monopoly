@@ -198,7 +198,12 @@ def rules():
     pass
 
 def about():
-    pass
+    about_window = Toplevel()
+    load=Image.open('about_us.png')
+    render=ImageTk.PhotoImage(load)
+    image=Label(about_window,image=render,borderwidth=0)
+    image.image=render
+    image.pack(side='top',anchor=CENTER)
 
 win()
 img()
@@ -632,7 +637,6 @@ cursor_result = cur.fetchall()
 for rent in cursor_result:
     rent_hotel.append(int(rent[0]))
 
-    
 def house(PLACE,current_player):
     if len(PLACE) > 0 :
         properties=[]
@@ -1531,7 +1535,6 @@ def run_call():
 def jail(player):
     global prisoner
     global turn_count
-    prisoner = []
     messagebox.showinfo(player[0]+"'s turn",'you have landed in jail!')
     result = messagebox.askquestion(player[0]+"'s turn","do you want to bail out?",type = 'yesno')
     if result == 'no':
