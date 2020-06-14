@@ -1445,11 +1445,17 @@ Luxury_Tax.place(x=916,y=464,height=46,width=20)
 Boardwalk = Button(root,text = '',command = lambda:buttons('BOARDWALK'),bg = 'dodgerblue3',fg = 'black')
 Boardwalk.place(x=916,y=510,height=46,width=20)
 
-mortgage_button = Button(root,text = 'MORTGAGE',command = lambda:mortgage(current_player,'not_a_place'),bg = 'black',fg = 'white')
-mortgage_button.place(x=473,y=685,height=20,width=40)
+Mortgage_Button = Button(root,text = '',command = lambda:mortgage(current_player,'not_a_place'),bg = 'black',fg = 'white')
+Mortgage_Button.place(x=429,y=670,height=40,width=40)
 
-house_button = Button(root,text = 'BUY A HOUSE',command = lambda:sets(current_player))
-house_button.place(x=550,y=685,height=20,width=40)
+Put_House_Button = Button(root,text = '',command = lambda:sets(current_player))
+Put_House_Button.place(x=545,y=670,height=40,width=40)
+
+Remove_Houses_Button = Button(root,text = '',bg = 'green',fg = 'white')
+Remove_Houses_Button.place(x=681,y=670,height=40,width=40)
+
+Trade_Button = Button(root,text = '',bg = 'yellow',fg = 'white')
+Trade_Button.place(x=798,y=670,height=40,width=40)
 
 quit = Button(root,text = 'QUIT',command = lambda:quit(list_of_players,property_state,railroad_state,company_state),bg = 'red',fg = 'black')
 quit.place(x = 1230,y = 0)
@@ -1549,6 +1555,7 @@ def run_call():
 def jail(player):
     global prisoner
     global turn_count
+
     messagebox.showinfo(player[0]+"'s turn",'you have landed in jail!')
     result = messagebox.askquestion(player[0]+"'s turn","do you want to bail out?",type = 'yesno')
     if result == 'no':
