@@ -644,48 +644,62 @@ def house(PLACE,current_player):
         available_properties=[]
         max_h = 0
         temp_prop = []
+        property_state1 = []
+        for i in property_state:
+            if i == 'colour_set':
+                property_state1.append(0)
+            elif i == '1' or i == '2' or i == '3' or i == '4':
+                property_state1.append(int(i))
+            elif i == 'hotel':
+                property_state1.append(5)
+            else:
+                property_state1.append(i)
+                
         for i in PLACE:
             temp_prop=[]
             prop=[]
             p_state=[]
             if i == colour_set_brown:
                 prop = colour_set_brown
-                p_state = property_state[0:2]
+                p_state = property_state1[0:2]
             elif i == colour_set_lightblue:
                 prop = colour_set_lightblue
-                p_state = property_state[2:5]
+                p_state = property_state1[2:5]
             elif i == colour_set_pink:
                 prop = colour_set_pink
-                p_state = property_state[5:8]
+                p_state = property_state1[5:8]
             elif i == colour_set_orange:
                 prop = colour_set_orange
-                p_state = property_state[8:11]
+                p_state = property_state1[8:11]
             elif i == colour_set_red:
                 prop = colour_set_red
-                p_state = property_state[11:14]
+                p_state = property_state1[11:14]
             elif i == colour_set_yellow:
                 prop = colour_set_yellow
-                p_state = property_state[14:17]
+                p_state = property_state1[14:17]
             elif i == colour_set_green:
                 prop = colour_set_green
-                p_state = property_state[17:20]
+                p_state = property_state1[17:20]
             elif i == colour_set_blue:
                 prop = colour_set_blue
-                p_state = property_state[20:22]
+                p_state = property_state1[20:22]
+            print("P_state",p_state)
+            print("prop",prop)
             max_h = max(p_state)
+            print("Max_p" , max_h)
             k=0
             for j in prop:
                 m = p_state[k]
                 if m < max_h:
                     temp_prop.append(j)
                 k+=1
+            print(temp_prop)
             if len(temp_prop) != 0:
                 for j in temp_prop:
                     available_properties.append(j)
             else:
-                for j in properties:
+                for j in prop:
                     available_properties.append(j)
-
         house_window = Toplevel()
         Label(house_window,text = 'WHICH PROPERTY DO YOU WANT TO BUILD A HOUSE IN?').pack(side = TOP)
         for j in available_properties:
@@ -694,7 +708,6 @@ def house(PLACE,current_player):
             image_load = Button(house_window,image=Render,command = lambda:house_from_button(j))
             image_load.image = Render
             image_load.pack(side = LEFT)
-
     elif len(PLACE) == 0:
         messagebox.showinfo(current_player[0]+"'s turn!","you don't have any colour sets to build a house!")
 
@@ -754,6 +767,7 @@ def house(PLACE,current_player):
                 if result == 'yes':
                     property_state[places.index(PLACE)] = '1'
                     rent_prices_places[places.index(PLACE)] = rent_1_house[places.index(PLACE)]
+        
         
 #=========================================================HOUSE==========================================================================#    
 #########################################################################################################################################################
@@ -1287,7 +1301,7 @@ Marvin_Gardens.place(x=795,y=48,height=20,width=46)
 
 
 
-Go_To_Jail = Button(root,text = '',command = lambda:jail('GO TO JAIL',current_player),bg = 'thistle3',fg = 'black')
+Go_To_Jail = Button(root,text = '',bg = 'thistle3',fg = 'black')
 Go_To_Jail.place(x=841,y=48,height=20,width=75)
 #======================================================ROW-1====================================================================#
 ##############################################################################################################################################
@@ -1606,7 +1620,7 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
-    dice = 30
+    dice = 1
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     print('prisoner....',prisoner)
