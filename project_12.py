@@ -1563,11 +1563,13 @@ def run_call():
 def jail(player):
     global prisoner
     global turn_count
-    player[3] = 10
+    
     messagebox.showinfo(player[0]+"'s turn",'you have landed in jail!')
     result = messagebox.askquestion(player[0]+"'s turn","do you want to bail out?",type = 'yesno')
+    
     if result == 'no':
         turn_count = 0
+        player[3] = 10
         prisoner.append(player)
 
         if current_player == p1:
@@ -1578,6 +1580,11 @@ def jail(player):
             P3.place(x=coordinates[10][0],y=coordinates[10][1])
         elif current_player == p4:
             P4.place(x=coordinates[10][0],y=coordinates[10][1])
+
+    else:
+        player[1] -= 50
+
+    
 
 def movement(current_player,dice):
     if current_player == p1:
@@ -1635,16 +1642,15 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
+    dice = 30
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
-    print('prisoner....',prisoner)
-    print('current player....',current_player)
     if current_player in prisoner:
-        print('a')
         turn_count += 1
         print(turn_count)
+        messagebox.showinfo(current_player[0]+"'s turn",'you are in jail!'+str(3-turn_count)+'more turn(s)' )
         if turn_count == 3:
-            prisoner.pop(current_player)
+            prisoner.remove(current_player)
             movement(current_player,dice)
             current_player[3] += dice
 
