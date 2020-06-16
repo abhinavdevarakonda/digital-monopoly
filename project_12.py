@@ -1648,7 +1648,10 @@ def running(button_clicks):
     if current_player in prisoner:
         turn_count += 1
         print(turn_count)
-        messagebox.showinfo(current_player[0]+"'s turn",'you are in jail!'+str(3-turn_count)+'more turn(s)' )
+        if 3-turn_count == 0:
+            messagebox.showinfo(current_player[0]+"'s turn!",'you are free!')
+        else:
+            messagebox.showinfo(current_player[0]+"'s turn",'you are in jail! '+str(3-turn_count)+'more turn(s)' )
         if turn_count == 3:
             prisoner.remove(current_player)
             movement(current_player,dice)
