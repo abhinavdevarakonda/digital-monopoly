@@ -1390,7 +1390,7 @@ Reading_Railroad.place(x=611,y=631,height=20,width=46)
 
 
 
-Income_Tax = Button(root,text = '',command = lambda:tax(current_player,200),bg = 'orange red',fg = 'black')
+Income_Tax = Button(root,text = '',bg = 'orange red',fg = 'black')
 Income_Tax.place(x=657,y=631,height=20,width=46)
 
 
