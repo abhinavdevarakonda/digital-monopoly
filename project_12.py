@@ -319,6 +319,7 @@ cursor_result = cur.fetchall()
 for price in cursor_result:
     hotel_price.append(int(price[0]))
 
+
 ##################
 
 
@@ -1017,7 +1018,7 @@ def mortgage(current_player,PLACE):
                     prop.pack(side = LEFT)
                     messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
         else:
-            if PLACE in places:
+            if PLACE in places: 
                 if property_state[places.index(PLACE)] in ['bought','1','2','3','4','hotel']:
                     messagebox.showinfo(current_player[0]+"'s turn!","YOU HAVE CHOSEN TO MORTGAGE "+PLACE.upper()+"!")
                     confirmed(PLACE,current_player,mortgage_window)       
@@ -1453,16 +1454,27 @@ Luxury_Tax.place(x=916,y=464,height=46,width=20)
 Boardwalk = Button(root,text = '',command = lambda:buttons('BOARDWALK'),bg = 'dodgerblue3',fg = 'black')
 Boardwalk.place(x=916,y=510,height=46,width=20)
 
-Mortgage_Button = Button(root,text = '',command = lambda:mortgage(current_player,'not_a_place'),bg = 'black',fg = 'white')
+load = Image.open("buttons\\mortgage.png")
+render = ImageTk.PhotoImage(load)
+Mortgage_Button = Button(root,image=render,command = lambda:mortgage(current_player,'not_a_place'),bg = 'white')
+Mortgage_Button.image = render
 Mortgage_Button.place(x=429,y=670,height=40,width=40)
 
-Put_House_Button = Button(root,text = '',command = lambda:sets(current_player))
+load = Image.open("buttons\\house.png")
+render = ImageTk.PhotoImage(load)
+Put_House_Button = Button(root,image=render,command = lambda:sets(current_player),bg = 'white')
+Put_House_Button.image = render
 Put_House_Button.place(x=545,y=670,height=40,width=40)
 
-Remove_Houses_Button = Button(root,text = '',bg = 'green',fg = 'white')
+load = Image.open("buttons\\remove_house.png")
+render = ImageTk.PhotoImage(load)
+Remove_Houses_Button = Button(root,image=render,bg = 'white')
+Remove_Houses_Button.image = render
 Remove_Houses_Button.place(x=681,y=670,height=40,width=40)
 
-Trade_Button = Button(root,text = '',bg = 'yellow',fg = 'white')
+load = Image.open("buttons\\trade.png")
+render = ImageTk.PhotoImage(load)
+Trade_Button = Button(root,image=render,bg = 'white')
 Trade_Button.place(x=798,y=670,height=40,width=40)
 
 quit = Button(root,text = 'QUIT',command = lambda:quit(list_of_players,property_state,railroad_state,company_state),bg = 'red',fg = 'black')
@@ -1642,7 +1654,6 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
-    dice = 30
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     if current_player in prisoner:
