@@ -726,22 +726,25 @@ def house(PLACE,current_player):
             if property_state[places.index(PLACE)].isdigit():
                 result = messsagebox.askquestion("confirmation","The price of a house in "+PLACE+' is ' + str(house_price[places.index(PLACE)])+" Are you sure you want to buy a house?",type = 'yesno')
                 if result == 'yes':
-                     property_state[places.index(PLACE)]+= 1
-                     current_player[3] - house_price[places.index(PLACE)]
+                    property_state[places.index(PLACE)]+= 1
+                    current_player[3] - house_price[places.index(PLACE)]
 
-                     if int(property_state[places.index(PLACE)]) == 5:
-                         property_state[places.index(PLACE)] = 'hotel'
-                         current_player[3] - hotel_price[places.index(PLACE)] #hotel_price
-                         
-                     elif int(property_state[places.index(PLACE)]) == 2:
-                         rent_prices_places[places.index(PLACE)] = rent_2_house[places.index(PLACE)]
-                         
-                     elif int(property_state[places.index(PLACE)]) == 3:
+                    if int(property_state[places.index(PLACE)]) == 5:
+                        property_state[places.index(PLACE)] = 'hotel'
+                        current_player[3] - hotel_price[places.index(PLACE)] #hotel_price
+                        place_house(PLACE)
+                    
+                    elif int(property_state[places.index(PLACE)]) == 2:
+                        rent_prices_places[places.index(PLACE)] = rent_2_house[places.index(PLACE)]
+                        place_house(PLACE)
+
+                    elif int(property_state[places.index(PLACE)]) == 3:
                         rent_prices_places[places.index(PLACE)] = rent_3_house[places.index(PLACE)]
+                        place_house(PLACE)
 
-                     elif int(property_state[places.index(PLACE)]) == 4:
+                    elif int(property_state[places.index(PLACE)]) == 4:
                         rent_prices_places[places.index(PLACE)] = rent_4_house[places.index(PLACE)]
-
+                        place_house(PLACE)
                                          
             else:
                 result = messagebox.askquestion("confirmation","The price of a house in "+PLACE +" is "+str(house_price[places.index(PLACE)])+" Are you sure you want to buy a house?",type = 'yesno') 
@@ -756,20 +759,21 @@ def house(PLACE,current_player):
             if property_state[places.index(PLACE)].isdigit():
                 result = messsagebox.askquestion("confirmation","The price of a house in "+PLACE+' is ' + str(house_price[places.index(PLACE)])+" Are you sure you want to buy a house?",type = 'yesno')
                 if result == 'yes':
-                     property_state[places.index(PLACE)]+= 1
-                     current_player[3] - house_price[places.index(PLACE)]
+                    property_state[places.index(PLACE)]+= 1
+                    current_player[3] - house_price[places.index(PLACE)]
 
-                     if int(property_state[places.index(PLACE)]) == 5:
-                         property_state[places.index(PLACE)] = 'hotel'
-                         current_player[3] - hotel_price[places.index(PLACE)] #hotel_price
+                    if int(property_state[places.index(PLACE)]) == 5:
+                        property_state[places.index(PLACE)] = 'hotel'
+                        current_player[3] - hotel_price[places.index(PLACE)] #hotel_price
+
                          
-                     elif int(property_state[places.index(PLACE)]) == 2:
-                         rent_prices_places[places.index(PLACE)] = rent_2_house[places.index(PLACE)]
+                    elif int(property_state[places.index(PLACE)]) == 2:
+                        rent_prices_places[places.index(PLACE)] = rent_2_house[places.index(PLACE)]
                          
-                     elif int(property_state[places.index(PLACE)]) == 3:
+                    elif int(property_state[places.index(PLACE)]) == 3:
                         rent_prices_places[places.index(PLACE)] = rent_3_house[places.index(PLACE)]
 
-                     elif int(property_state[places.index(PLACE)]) == 4:
+                    elif int(property_state[places.index(PLACE)]) == 4:
                         rent_prices_places[places.index(PLACE)] = rent_4_house[places.index(PLACE)]
                                          
             else:
@@ -778,7 +782,34 @@ def house(PLACE,current_player):
                     property_state[places.index(PLACE)] = '1'
                     rent_prices_places[places.index(PLACE)] = rent_1_house[places.index(PLACE)]
         
-        
+#========================================================PLACING-HOUSES====================================================================
+def place_house(PLACE):
+    if property_state[places.index(PLACE)].isdigit():
+        if PLACE in ['MEDITERRANEAN AVENUE','BALTIC AVENUE','ORIENTAL AVENUE','VERMONT AVENUE','CONNECTICUT AVENUE']:
+            load = Image.open("house_set_1\\"+"house_"+str(property_state[places.index(PLACE)])+".png")
+            render = ImageTk.PhotoImage(load)
+            h = Button(root,image=render)
+            h.image = render
+            h.place()
+        elif PLACE in ['ST. CHARLES PLACE','STATES AVENUE','VIRGINIA AVENUE','ST. JAMES PLACE','TENNESSEE AVENUE', 'NEW YORK AVENUE']:
+            load = Image.open("house_set_2\\"+"house_"+str(property_state[places.index(PLACE)])+".png")
+            render = ImageTk.PhotoImage(load)
+            h = Button(root,image=render)
+            h.image = render
+            h.place()
+        elif PLACE in ['KENTUCKY AVENUE','INDIANA AVNUE','ILLINOIS AVENUE','ATLANTIC AVENUE','VENTNOR AVENUE','MARVIN GARDENS']:
+            load = Image.open("house_set_1\\"+"house_"+str(property_state[places.index(PLACE)])+".png").rotate(180)
+            render = ImageTk.PhotoImage(load)
+            h = Button(root,image=render)
+            h.image = render
+            h.place()
+        else:
+            load = Image.open("house_set_2\\"+"house_"+str(property_state[places.index(PLACE)])+".png").rotate(180)
+            render = ImageTk.PhotoImage(load)
+            h = Button(root,image=render)
+            h.image = render
+            h.place()
+
 #=========================================================HOUSE==========================================================================#    
 #########################################################################################################################################################
 def sets(current_player):
