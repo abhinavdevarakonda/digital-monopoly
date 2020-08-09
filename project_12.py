@@ -1064,7 +1064,7 @@ def mortgage(current_player,PLACE):
                     confirmed(PLACE,current_player,mortgage_window)
 
     else:
-        #mortgage_window = Toplevel()
+        
         if list_of_players.index(current_player) < len(p_name)-1:
             current_player = list_of_players[list_of_players.index(current_player)+1]
         else:
@@ -1072,7 +1072,7 @@ def mortgage(current_player,PLACE):
 
         result = messagebox.askquestion(current_player[0]+"'s turn!","Do you want to mortgage a property?",type = 'yesno')
         if result == "yes":
-           #mortgage_window = Toplevel()
+           
             Label(mortgage_window,text = 'CHOOSE THE PROPERTY YOU WOULD LIKE TO MORTGAGE:').pack(side = TOP)
             for props in current_player[2]:
                 load = Image.open("propertycards\\"+props+".png")
@@ -1334,20 +1334,12 @@ def tax(current_player,tax_amount):
 #################################################################################################################################
 #=======================================================ROW-1=====================================================================#
 #these labels/places are in order of the board from free parking as top right in the board
-'''
-Free_Parking = Button(root,text = '',command = lambda:parking(current_player),bg = 'thistle3',fg = 'black')
-Free_Parking.place(x = 352,y=48,height=20,width=75)
-'''
 
 
 Kentucky_Avenue = Button(root,text = '',command = lambda:buttons('KENTUCKY AVENUE'),bg = 'red2',fg = 'black')
 Kentucky_Avenue.place(x=427,y=48,height=20,width=46)
 
 
-'''
-Chance_2 = Button(root,text = '',command = lambda:chance(current_player),bg = 'salmon2',fg = 'black')
-Chance_2.place(x=473,y=48,height=20,width=46)
-'''
 
 
 Indiana_Avenue =  Button(root,text = '',command = lambda:buttons('INDIANA AVENUE'),bg = 'red2',fg = 'black')
@@ -1384,10 +1376,7 @@ Marvin_Gardens = Button(root,text = '',command = lambda:buttons('MARVIN GARDENS'
 Marvin_Gardens.place(x=795,y=48,height=20,width=46) 
 
 
-'''
-Go_To_Jail = Button(root,text = '',bg = 'thistle3',fg = 'black')
-Go_To_Jail.place(x=841,y=48,height=20,width=75)
-'''
+
 #======================================================ROW-1====================================================================#
 ##############################################################################################################################################
 #======================================================ROW-2====================================================================#
@@ -1400,11 +1389,6 @@ New_York_Avenue.place(x=333,y=142,height=46,width=20)
 Tennessee_Avenue = Button(root,text = '',command = lambda:buttons('TENNESSEE AVENUE'),bg = 'dark orange',fg = 'black')
 Tennessee_Avenue.place(x=333,y=188,height=46,width=20)
 
-
-'''
-Community_Chest_2 = Button(root,text = '',command = lambda:chest('COMMUNITY CHEST',current_player,10),bg = 'gold2',fg = 'black')
-Community_Chest_2.place(x=333,y=234,height=46,width=20)
-'''
 
 
 StJames_Place = Button(root,text = '',command = lambda:buttons('ST. JAMES PLACE'),bg = 'dark orange',fg = 'black')
@@ -1437,10 +1421,6 @@ StCharles_Place.place(x=333,y=510,height=46,width=20)
 #====================================================ROW-2==================================================================#
 ##########################################################################################################################################
 #====================================================ROW-3==================================================================#
-'''
-Just_Visiting_Jail = Button(root,text = '',command = lambda:start(current_player),bg = 'thistle3',fg = 'black')
-Just_Visiting_Jail.place(x=352,y=631,height=20,width=75)
-'''
 
 
 Connecticut_Avenue = Button(root,text = '',command = lambda:buttons('CONNECTICUT AVENUE'),bg = 'light sky blue',fg = 'black')
@@ -1452,11 +1432,6 @@ Vermont_Avenue = Button(root,text = '',command = lambda:buttons('VERMONT AVENUE'
 Vermont_Avenue.place(x=473,y=631,height=20,width=46)
 
 
-'''
-Chance_1 = Button(root,text = '',command = lambda:chance(current_player),bg = 'salmon2',fg = 'black')
-Chance_1.place(x=519,y=631,height=20,width=46)
-'''
-
 
 Oriental_Avenue = Button(root,text = '',command = lambda:buttons('ORIENTAL AVENUE'),bg = 'light sky blue',fg = 'black')
 Oriental_Avenue.place(x=565,y=631,height=20,width=46)
@@ -1467,30 +1442,16 @@ Reading_Railroad = Button(root,text = '',command = lambda:buttons('READING RAILR
 Reading_Railroad.place(x=611,y=631,height=20,width=46)
 
 
-'''
-Income_Tax = Button(root,text = '',bg = 'orange red',fg = 'black')
-Income_Tax.place(x=657,y=631,height=20,width=46)
-'''
-
 
 Baltic_Avenue = Button(root,text = '',command = lambda:buttons('BALTIC AVENUE'),bg = 'saddle brown',fg = 'black')
 Baltic_Avenue.place(x=703,y=631,height=20,width=46)
 
-
-'''
-Community_Chest_1 = Button(root,text = '',command = lambda:chest(current_player),bg = 'gold2',fg = 'black')
-Community_Chest_1.place(x=749,y=631,height=20,width=46)
-'''
 
 
 Mediterranean_Avenue = Button(root,text = '',command = lambda:buttons('MEDITERRANEAN AVENUE'),bg = 'saddle brown',fg = 'black')
 Mediterranean_Avenue.place(x=795,y=631,height=20,width=46)
 
 
-'''
-GO = Button(root,text = '',command = lambda:GO(current_player),bg = 'thistle3',fg = 'black')
-GO.place(x=841,y=631,height=20,width=75)
-'''
 #================================================ROW-3==================================================================#
 ######################################################################################################################################
 #================================================ROW-4==================================================================#
@@ -1504,11 +1465,6 @@ North_Carolina_Avenue = Button(root,text = '',command = lambda:buttons('NORTH CA
 North_Carolina_Avenue.place(x=916,y=188,height=46,width=20)
 
 
-'''
-Community_Chest_3 = Button(root,text = '',command = lambda:chest(current_player),bg = 'gold2',fg = 'black')
-Community_Chest_3.place(x=916,y=234,height=46,width=20)
-'''
-
 
 Pennsylvania_Avenue = Button(root,text = '',command = lambda:buttons('PENNSYLVANIA AVENUE'),bg = 'forest green',fg = 'black')
 Pennsylvania_Avenue.place(x=916,y=280,height=46,width=20)
@@ -1519,16 +1475,12 @@ Short_Line = Button(root,text = '',command = lambda:buttons('SHORT LINE'),bg = '
 Short_Line.place(x=916,y=326,height=46,width=20)
 
 
-'''
-Chance_3 = Button(root,text = '',command = lambda:chance(current_player),bg = 'salmon2',fg = 'black')
-Chance_3.place(x=916,y=372,height=46,width=20)
-'''
+
 Park_Place = Button(root,text = '',command = lambda:buttons('PARK PLACE'),bg = 'dodgerblue3',fg = 'black')
 Park_Place.place(x=916,y=418,height=46,width=20)
-'''
-Luxury_Tax = Button(root,text = '',command = lambda:buttons(current_player,75),bg = 'orange red',fg = 'black')
-Luxury_Tax.place(x=916,y=464,height=46,width=20)
-'''
+
+
+
 Boardwalk = Button(root,text = '',command = lambda:buttons('BOARDWALK'),bg = 'dodgerblue3',fg = 'black')
 Boardwalk.place(x=916,y=510,height=46,width=20)
 
