@@ -17,7 +17,7 @@ k = 0
 in_jail = 0
 prisoner = []
 turn_count = 0
-
+ch = 0
 def win1():
     global root
     root.destroy()
@@ -1113,7 +1113,7 @@ def display():
     y=0
     for i in range(len(p_name)):
         if i == 0:
-            player_color = 'firebrick2'
+            player_color = 'firebrick2'         
             x=40
             y=50
         elif i == 1:
@@ -1292,11 +1292,14 @@ def chance(current_player):
     Button(chance_window,text = 'ok',command = ok).pack()
     
     def chance_action(pic):
+        global ch
         if pic == 'chance1':
             current_player[1]+=150
             display()
         
         elif pic == 'chance2':
+            #ch is a constant to check if a player had to change location because of one of the chance cards
+            ch = 1
             if current_player[3] > 11:
                 dice = 39-current_player[3]+11
             else:
@@ -1305,6 +1308,7 @@ def chance(current_player):
             current_player[3] = 11
 
         elif pic == 'chance3':
+            ch = 1
             #24
             if current_player[3] > 24:
                 dice = 39-current_player[3]+24
@@ -1314,6 +1318,7 @@ def chance(current_player):
             current_player[3] = 24
         
         else: 
+            ch = 1
             dice = 39-current_player[3]
             movement(current_player,dice)
             current_player[3] = 39
@@ -1691,34 +1696,39 @@ def running(button_clicks):
     global clicked
     global current_player
     global dice
-    current_player = list_of_players[button_clicks-1] 
-    #DICE
-    die1 = random.randint(1,6)
-    die2 = random.randint(1,6)
-    dice = die1 + die2
-    dice =  7
-    messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
-    DICE.place(x=5000,y=5000)
-    if current_player in prisoner:
-        turn_count += 1        
-        if 3-turn_count == 0:
-            messagebox.showinfo(current_player[0]+"'s turn!",'you are free!')
-        else:
-            messagebox.showinfo(current_player[0]+"'s turn",'you are in jail! '+str(3-turn_count)+'more turn(s)' )
-        if turn_count == 3:
-            prisoner.remove(current_player)
+    global ch
+    if ch == 0:
+        current_player = list_of_players[button_clicks-1] 
+        #DICE
+        die1 = random.randint(1,6)
+        die2 = random.randint(1,6)
+        dice = die1 + die2
+        dice = 7
+        messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
+        DICE.place(x=5000,y=5000)
+        if current_player in prisoner:
+            turn_count += 1        
+            if 3-turn_count == 0:
+                messagebox.showinfo(current_player[0]+"'s turn!",'you are free!')
+            else:
+                messagebox.showinfo(current_player[0]+"'s turn",'you are in jail! '+str(3-turn_count)+'more turn(s)' )
+            if turn_count == 3:
+                prisoner.remove(current_player)
+                movement(current_player,dice)
+                current_player[3] += dice
+
+            run_call()
+            
+        else:        
             movement(current_player,dice)
             current_player[3] += dice
-
-        run_call()
-        
-    else:        
-        movement(current_player,dice)
-        current_player[3] += dice
 
     #DICE
 #
     #PASSING GO
+    #if ch == 1 or 0, then the player had just changed his location and hence we have to check if he landed on a place/property
+    if ch == 1:
+        ch = 0
     if current_player[3]>39:
         current_player[3] -=40
         messagebox.showinfo(current_player[0]+"'s turn","COLLECT 200$")
@@ -1762,10 +1772,12 @@ def running(button_clicks):
         tax(current_player,200)
         
     elif current_player[3] == 38:
-        tax(current_player,75)      
+        tax(current_player,75)    
+    
     #TAX
 #running()
 #===============================================RUNNING=================================================================#
+
 dice_image = ImageTk.PhotoImage(file = 'dice_image.png')
 DICE = Button(root,image=dice_image,command = lambda:run_call(),bg = 'black')
 DICE.place(x = 565,y = 326)
