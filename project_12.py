@@ -1108,6 +1108,7 @@ def start(n1):
         
 
 def display():
+    print(list_of_players)
     x=0
     y=0
     for i in range(len(p_name)):
@@ -1132,6 +1133,7 @@ def display():
 
         p1_money_label=Label(root,text="Money - " + str(list_of_players[i][1]),bg='#36393e',fg=player_color,font="TkDefaultFont 12 bold",anchor=W)
         p1_money_label.place(x=x,y=y+70,height=30,width=290)
+        #
 
         p1_location_label=Label(root,text="Location - " + order[(list_of_players[i][3])],bg='#36393e',fg=player_color,font="TkDefaultFont 12 bold",anchor=W)
         p1_location_label.place(x=x,y=y+110,height=30,width=290)
@@ -1274,6 +1276,11 @@ def parking(current_player):
 #############################################################################################################################################
 #====================================================CHANCE===================================================================#
 def chance(current_player):
+
+    def ok():
+        chance_window.destroy()
+        chance_action(pic)
+
     chance_window = Toplevel()
     list_of_chances = ['chance1','chance2','chance3','chance3','chance4']
     pic = random.choice(list_of_chances)
@@ -1282,6 +1289,34 @@ def chance(current_player):
     chance_label = Label(chance_window,image=render)
     chance_label.image = render
     chance_label.pack()
+    Button(chance_window,text = 'ok',command = ok).pack()
+    
+    def chance_action(pic):
+        if pic == 'chance1':
+            current_player[1]+=150
+            display()
+        
+        elif pic == 'chance2':
+            if current_player[3] > 11:
+                dice = 39-current_player[3]+11
+            else:
+                dice = 11-current_player[3]
+            movement(current_player,dice)
+            current_player[3] = 11
+
+        elif pic == 'chance3':
+            #24
+            if current_player[3] > 24:
+                dice = 39-current_player[3]+24
+            else:
+                dice = 24-current_player[3] 
+            movement(current_player,dice)
+            current_player[3] = 24
+        
+        else: 
+            dice = 39-current_player[3]
+            movement(current_player,dice)
+            current_player[3] = 39
 #====================================================CHANCE======================================================================#
 ################################################################################################################################################
 #=====================================================CHEST======================================================================#
@@ -1697,13 +1732,13 @@ def movement(current_player,dice):
             root.update()
         DICE.place(x=565,y=326)
         display()
+    
 
 def running(button_clicks):
     global turn_count
     global clicked
     global current_player
     global dice
-    
     current_player = list_of_players[button_clicks-1] 
     #DICE
     die1 = random.randint(1,6)
