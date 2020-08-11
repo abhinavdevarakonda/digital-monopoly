@@ -18,7 +18,7 @@ in_jail = 0
 prisoner = []
 turn_count = 0
 ch = 0
-def win1():
+def board_window():
     global root
     root.destroy()
     root=Tk()
@@ -26,7 +26,7 @@ def win1():
     root.title('Monopoly')
     root.configure(bg='black')
 
-def base():
+def home_window():
     def win():
         global root1
         root1.destroy()
@@ -231,10 +231,10 @@ PLAY'''
 
     root1.mainloop()
 
-base()
+home_window()
 
 root = Tk()
-win1()
+board_window()
 root.title('                                                                                                                                                                                                 MONOPOLY                                 ')
 root.configure(bg='#36393e')
 root.geometry('1270x735')
@@ -485,7 +485,7 @@ P4 = Label(root,image=render)
 P4.image = render
 P4.place(x=885,y=600,height = 20,width = 20)
 
-def buttons(PLACE):
+def cards(PLACE):
     global owner
     global picture_popup
     picture_popup = Toplevel()
@@ -1082,6 +1082,7 @@ def mortgage(current_player,PLACE):
                 prop.pack(side = LEFT)
 #==========================================================RENT=================================================================
 #=========================================================START=================================================================
+'''
 def start(n1):
     start_window = Tk()
     messagebox.showinfo("Welcome!","This is a test run, which will decide the order in which you players will be taking turns (highest to lowest): \n")
@@ -1105,9 +1106,11 @@ def start(n1):
     for i in range(n1):
         print(players[i])
 
-        
-
+   '''     
+ch = 0
 def display():
+    global ch
+
     print(list_of_players)
     x=0
     y=0
@@ -1143,136 +1146,173 @@ def display():
 
         display_properties(x,y+190,i)
 
+    if ch == 1:
+        ch = 0
+        if current_player[3]>39:
+            current_player[3] -=40
+            messagebox.showinfo(current_player[0]+"'s turn","COLLECT 200$")
+            current_player[1] += 200
+    
+        #PASSING GO
+        
+        if order[current_player[3]] == 'GO TO JAIL':
+            jail(current_player)
+
+        #PLACES
+        if order[current_player[3]] in places:
+            if property_state[places.index(order[current_player[3]])] == 'sale':
+                place(order[current_player[3]],current_player)
+                
+            elif property_state[places.index(order[current_player[3]])] == 'bought' or property_state[places.index(order[current_player[3]])] == 'colour_set' or property_state[places.index(order[current_player[3]])] == 'mortgaged' or property_state[places.index(order[current_player[3]])] in ['1','2','3','4','hotel']:
+                rent(order[current_player[3]],current_player,rent_prices_places[places.index(order[current_player[3]])])
+
+        #RAILROADS
+        elif order[current_player[3]] in railroads:
+            if railroad_state[railroads.index(order[current_player[3]])] == 'sale':
+                place(order[current_player[3]],current_player)
+        
+            elif railroad_state[railroads.index(order[current_player[3]])] == 'bought' or railroad_state[railroads.index(order[current_player[3]])] == 'mortgaged':
+                rent(order[current_player[3]],current_player,rent_prices_railroads[railroads.index(order[current_player[3]])])
+        #COMPANIES
+        elif order[current_player[3]] in companies:
+            if company_state[companies.index(order[current_player[3]])] == 'sale':
+                place(order[current_player[3]],current_player)
+
+            elif company_state[companies.index(order[current_player[3]])] == 'bought' or company_state[companies.index(order[current_player[3]])] == 'mortgaged':
+                rent(order[current_player[3]],current_player,1)
+    #
+        elif current_player[3] in [7,22,36]:
+            chance(current_player)
+        elif current_player[3] in [2,17,33]:
+            chest(current_player)
+
+        #TAX
+        if current_player[3] == 4 :
+            tax(current_player,200)
+            
+        elif current_player[3] == 38:
+            tax(current_player,75)     
+
+
     
 def display_properties(x1,y1,i):
     f1=Frame(root,bg="#36393e")
     f1.place(x=x1,y=y1,height=80,width=188)
         
     if places[0] in list_of_players[i][2]:
-        Button(f1,text="",bg="saddle brown",relief="solid",borderwidth=0.5,command = lambda:buttons('MEDITERRANEAN AVENUE')).place(x=8,y=8,height=10,width=10)
+        Button(f1,text="",bg="saddle brown",relief="solid",borderwidth=0.5,command = lambda:cards('MEDITERRANEAN AVENUE')).place(x=8,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=8,y=8,height=10,width=10)
     if places[1] in list_of_players[i][2]:
-        Button(f1,text="",bg="saddle brown",relief="solid",borderwidth=0.5,command = lambda:buttons('BALTIC AVENUE')).place(x=8,y=26,height=10,width=10)
+        Button(f1,text="",bg="saddle brown",relief="solid",borderwidth=0.5,command = lambda:cards('BALTIC AVENUE')).place(x=8,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=8,y=26,height=10,width=10)
     if places[2] in list_of_players[i][2]:
-        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:buttons('ORIENTAL AVENUE')).place(x=26,y=8,height=10,width=10)
+        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:cards('ORIENTAL AVENUE')).place(x=26,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=26,y=8,height=10,width=10)
     if places[3] in list_of_players[i][2]:
-        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:buttons('VERMONT AVENUE')).place(x=26,y=26,height=10,width=10)
+        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:cards('VERMONT AVENUE')).place(x=26,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=26,y=26,height=10,width=10)
     if places[4] in list_of_players[i][2]:
-        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:buttons('CONNECTICUT AVENUE')).place(x=26,y=44,height=10,width=10)
+        Button(f1,text="",bg="light sky blue",relief="solid",borderwidth=0.5,command = lambda:cards('CONNECTICUT AVENUE')).place(x=26,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=26,y=44,height=10,width=10)
     if places[5] in list_of_players[i][2]:
-        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:buttons('ST. CHARLES PLACE')).place(x=44,y=8,height=10,width=10)
+        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:cards('ST. CHARLES PLACE')).place(x=44,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=44,y=8,height=10,width=10)
     if places[6] in list_of_players[i][2]:
-        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:buttons('STATES AVENUE')).place(x=44,y=26,height=10,width=10)
+        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:cards('STATES AVENUE')).place(x=44,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=44,y=26,height=10,width=10)
     if places[7] in list_of_players[i][2]:
-        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:buttons('VIRGINIA AVENUE')).place(x=44,y=44,height=10,width=10)
+        Button(f1,text="",bg="deep pink3",relief="solid",borderwidth=0.5,command = lambda:cards('VIRGINIA AVENUE')).place(x=44,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=44,y=44,height=10,width=10)
     if places[8] in list_of_players[i][2]:
-        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:buttons('ST. JAMES PLACE')).place(x=62,y=8,height=10,width=10)
+        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:cards('ST. JAMES PLACE')).place(x=62,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=62,y=8,height=10,width=10)
     if places[9] in list_of_players[i][2]:
-        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:buttons('TENNESSEE AVENUE')).place(x=62,y=26,height=10,width=10)
+        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:cards('TENNESSEE AVENUE')).place(x=62,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=62,y=26,height=10,width=10)
     if places[10] in list_of_players[i][2]:
-        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:buttons('NEW YORK AVENUE')).place(x=62,y=44,height=10,width=10)
+        Button(f1,text="",bg="dark orange",relief="solid",borderwidth=0.5,command = lambda:cards('NEW YORK AVENUE')).place(x=62,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=62,y=44,height=10,width=10)
     if places[11] in list_of_players[i][2]:
-        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:buttons('KENTUCKY AVENUE')).place(x=80,y=8,height=10,width=10)
+        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:cards('KENTUCKY AVENUE')).place(x=80,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=80,y=8,height=10,width=10)
     if places[12] in list_of_players[i][2]:
-        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:buttons('INDIANA AVENUE')).place(x=80,y=26,height=10,width=10)
+        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:cards('INDIANA AVENUE')).place(x=80,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=80,y=26,height=10,width=10)
     if places[13] in list_of_players[i][2]:
-        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:buttons('ILLINOIS AVENUE')).place(x=80,y=44,height=10,width=10)
+        Button(f1,text="",bg="red2",relief="solid",borderwidth=0.5,command = lambda:cards('ILLINOIS AVENUE')).place(x=80,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=80,y=44,height=10,width=10)
     if places[14] in list_of_players[i][2]:
-        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:buttons('ATLANTIC AVENUE')).place(x=98,y=8,height=10,width=10)
+        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:cards('ATLANTIC AVENUE')).place(x=98,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=98,y=8,height=10,width=10)
     if places[15] in list_of_players[i][2]:
-        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:buttons('VENTNOR AVENUE')).place(x=98,y=26,height=10,width=10)
+        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:cards('VENTNOR AVENUE')).place(x=98,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=98,y=26,height=10,width=10)
     if places[16] in list_of_players[i][2]:
-        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:buttons('MARVIN GARDENS')).place(x=98,y=44,height=10,width=10)
+        Button(f1,text="",bg="yellow2",relief="solid",borderwidth=0.5,command = lambda:cards('MARVIN GARDENS')).place(x=98,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=98,y=44,height=10,width=10)
     if places[17] in list_of_players[i][2]:
-        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:buttons('PACIFIC AVENUE')).place(x=116,y=8,height=10,width=10)
+        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:cards('PACIFIC AVENUE')).place(x=116,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=116,y=8,height=10,width=10)
     if places[18] in list_of_players[i][2]:
-        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:buttons('NORTH CAROLINA AVENUE')).place(x=116,y=26,height=10,width=10)
+        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:cards('NORTH CAROLINA AVENUE')).place(x=116,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=116,y=26,height=10,width=10)
     if places[19] in list_of_players[i][2]:
-        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:buttons('PENNSYLVANIA AVENUE')).place(x=116,y=44,height=10,width=10)
+        Button(f1,text="",bg="forest green",relief="solid",borderwidth=0.5,command = lambda:cards('PENNSYLVANIA AVENUE')).place(x=116,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=116,y=44,height=10,width=10)
     if places[20] in list_of_players[i][2]:
-        Button(f1,text="",bg="dodgerblue3",relief="solid",borderwidth=0.5,command = lambda:buttons('PARK PLACE')).place(x=134,y=8,height=10,width=10)
+        Button(f1,text="",bg="dodgerblue3",relief="solid",borderwidth=0.5,command = lambda:cards('PARK PLACE')).place(x=134,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=134,y=8,height=10,width=10)
     if places[21] in list_of_players[i][2]:
-        Button(f1,text="",bg="dodgerblue3",relief="solid",borderwidth=0.5,command = lambda:buttons('BOARDWALK')).place(x=134,y=26,height=10,width=10)
+        Button(f1,text="",bg="dodgerblue3",relief="solid",borderwidth=0.5,command = lambda:cards('BOARDWALK')).place(x=134,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=134,y=26,height=10,width=10)
     if railroads[0] in list_of_players[i][2]:
-        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:buttons('READING RAILROAD')).place(x=152,y=8,height=10,width=10)
+        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:cards('READING RAILROAD')).place(x=152,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=152,y=8,height=10,width=10)
     if railroads[1] in list_of_players[i][2]:
-        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:buttons('PENNSYLVANIA RAILROAD')).place(x=152,y=26,height=10,width=10)
+        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:cards('PENNSYLVANIA RAILROAD')).place(x=152,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=152,y=26,height=10,width=10)
     if railroads[2] in list_of_players[i][2]:
-        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:buttons('B&O RAILROAD')).place(x=152,y=44,height=10,width=10)
+        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:cards('B&O RAILROAD')).place(x=152,y=44,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=152,y=44,height=10,width=10)
     if railroads[3] in list_of_players[i][2]:
-        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:buttons('SHORT LINE')).place(x=152,y=62,height=10,width=10)
+        Button(f1,text="",bg="grey10",relief="solid",borderwidth=0.5,command = lambda:cards('SHORT LINE')).place(x=152,y=62,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=152,y=62,height=10,width=10)
     if companies[0] in list_of_players[i][2]:
-        Button(f1,text="",bg="sandy brown",relief="solid",borderwidth=0.5,command = lambda:buttons('ELECTRIC COMPANY')).place(x=170,y=8,height=10,width=10)
+        Button(f1,text="",bg="sandy brown",relief="solid",borderwidth=0.5,command = lambda:cards('ELECTRIC COMPANY')).place(x=170,y=8,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=170,y=8,height=10,width=10)
     if companies[1] in list_of_players[i][2]:
-        Button(f1,text="",bg="sandy brown",relief="solid",borderwidth=0.5,command = lambda:buttons('WATER WORKS')).place(x=170,y=26,height=10,width=10)
+        Button(f1,text="",bg="sandy brown",relief="solid",borderwidth=0.5,command = lambda:cards('WATER WORKS')).place(x=170,y=26,height=10,width=10)
     else:
         Label(f1,text="",bg="white",relief="solid",borderwidth=0.5).place(x=170,y=26,height=10,width=10)
     
 display()
-#====================================================START===================================================================#
-###########################################################################################################################################
-#=====================================================GO=====================================================================#
-def GO(current_player):
-    pass
-#=====================================================GO=====================================================================#
-###########################################################################################################################################
-#===================================================PARKING===================================================================#
-def parking(current_player):
-    pass   
-#===================================================PARKING====================================================================#
 #############################################################################################################################################
 #====================================================CHANCE===================================================================#
 def chance(current_player):
@@ -1341,43 +1381,43 @@ def tax(current_player,tax_amount):
 #these labels/places are in order of the board from free parking as top right in the board
 
 
-Kentucky_Avenue = Button(root,text = '',command = lambda:buttons('KENTUCKY AVENUE'),bg = 'red2',fg = 'black')
+Kentucky_Avenue = Button(root,text = '',command = lambda:cards('KENTUCKY AVENUE'),bg = 'red2',fg = 'black')
 Kentucky_Avenue.place(x=427,y=48,height=20,width=46)
 
 
 
 
-Indiana_Avenue =  Button(root,text = '',command = lambda:buttons('INDIANA AVENUE'),bg = 'red2',fg = 'black')
+Indiana_Avenue =  Button(root,text = '',command = lambda:cards('INDIANA AVENUE'),bg = 'red2',fg = 'black')
 Indiana_Avenue.place(x=519,y=48,height=20,width=46)
 
 
 
-Illinois_Avenue = Button(root,text = '',command = lambda:buttons('ILLINOIS AVENUE'),bg = 'red2',fg = 'black')
+Illinois_Avenue = Button(root,text = '',command = lambda:cards('ILLINOIS AVENUE'),bg = 'red2',fg = 'black')
 Illinois_Avenue.place(x=565,y=48,height=20,width=46)
 
 
 
-BO_Railroad = Button(root,text = '',command = lambda:buttons('B&O RAILROAD'),bg = 'grey10',fg = 'black')
+BO_Railroad = Button(root,text = '',command = lambda:cards('B&O RAILROAD'),bg = 'grey10',fg = 'black')
 BO_Railroad.place(x=611,y=48,height=20,width=46)
 
 
 
-Atlantic_Avenue =  Button(root,text = '',command = lambda:buttons('ATLANTIC AVENUE'),bg = 'yellow2',fg = 'black')
+Atlantic_Avenue =  Button(root,text = '',command = lambda:cards('ATLANTIC AVENUE'),bg = 'yellow2',fg = 'black')
 Atlantic_Avenue.place(x=657,y=48,height=20,width=46)
 
 
 
-Ventnor_Avenue = Button(root,text = '',command = lambda:buttons('VENTNOR AVENUE'),bg = 'yellow2',fg = 'black')
+Ventnor_Avenue = Button(root,text = '',command = lambda:cards('VENTNOR AVENUE'),bg = 'yellow2',fg = 'black')
 Ventnor_Avenue.place(x=703,y=48,height=20,width=46)
 
 
 
-Water_Works = Button(root,text = '',command = lambda:buttons('WATER WORKS'),bg = 'sandy brown',fg = 'black')
+Water_Works = Button(root,text = '',command = lambda:cards('WATER WORKS'),bg = 'sandy brown',fg = 'black')
 Water_Works.place(x=749,y=48,height=20,width=46)
 
 
 
-Marvin_Gardens = Button(root,text = '',command = lambda:buttons('MARVIN GARDENS'),bg = 'yellow2',fg = 'black')
+Marvin_Gardens = Button(root,text = '',command = lambda:cards('MARVIN GARDENS'),bg = 'yellow2',fg = 'black')
 Marvin_Gardens.place(x=795,y=48,height=20,width=46) 
 
 
@@ -1386,74 +1426,74 @@ Marvin_Gardens.place(x=795,y=48,height=20,width=46)
 ##############################################################################################################################################
 #======================================================ROW-2====================================================================#
 
-New_York_Avenue = Button(root,text = '',command = lambda:buttons('NEW YORK AVENUE'),bg = 'dark orange',fg = 'black')
+New_York_Avenue = Button(root,text = '',command = lambda:cards('NEW YORK AVENUE'),bg = 'dark orange',fg = 'black')
 New_York_Avenue.place(x=333,y=142,height=46,width=20)
 
 
 
-Tennessee_Avenue = Button(root,text = '',command = lambda:buttons('TENNESSEE AVENUE'),bg = 'dark orange',fg = 'black')
+Tennessee_Avenue = Button(root,text = '',command = lambda:cards('TENNESSEE AVENUE'),bg = 'dark orange',fg = 'black')
 Tennessee_Avenue.place(x=333,y=188,height=46,width=20)
 
 
 
-StJames_Place = Button(root,text = '',command = lambda:buttons('ST. JAMES PLACE'),bg = 'dark orange',fg = 'black')
+StJames_Place = Button(root,text = '',command = lambda:cards('ST. JAMES PLACE'),bg = 'dark orange',fg = 'black')
 StJames_Place.place(x=333,y=280,height=46,width=20)
 
 
 
-Pennsylvania_Railroad = Button(root,text = '',command = lambda:buttons('PENNSYLVANIA RAILROAD'),bg = 'grey10',fg = 'black')
+Pennsylvania_Railroad = Button(root,text = '',command = lambda:cards('PENNSYLVANIA RAILROAD'),bg = 'grey10',fg = 'black')
 Pennsylvania_Railroad.place(x=333,y=326,height=46,width=20)
 
 
 
-Virginia_Avenue = Button(root,text = '',command = lambda:buttons('VIRGINIA AVENUE'),bg = 'deep pink3',fg = 'black')
+Virginia_Avenue = Button(root,text = '',command = lambda:cards('VIRGINIA AVENUE'),bg = 'deep pink3',fg = 'black')
 Virginia_Avenue.place(x=333,y=372,height=46,width=20)
 
 
 
-States_Avenue = Button(root,text = '',command = lambda:buttons('STATES AVENUE'),bg = 'deep pink3',fg = 'black')
+States_Avenue = Button(root,text = '',command = lambda:cards('STATES AVENUE'),bg = 'deep pink3',fg = 'black')
 States_Avenue.place(x=333,y=418,height=46,width=20)
 
 
 
-Electric_Company = Button(root,text = '',command = lambda:buttons('ELECTRIC COMPANY'),bg = 'sandy brown',fg = 'black')
+Electric_Company = Button(root,text = '',command = lambda:cards('ELECTRIC COMPANY'),bg = 'sandy brown',fg = 'black')
 Electric_Company.place(x=333,y=464,height=46,width=20)
 
 
 
-StCharles_Place = Button(root,text = '',command = lambda:buttons('ST. CHARLES PLACE'),bg = 'deep pink3',fg = 'black')
+StCharles_Place = Button(root,text = '',command = lambda:cards('ST. CHARLES PLACE'),bg = 'deep pink3',fg = 'black')
 StCharles_Place.place(x=333,y=510,height=46,width=20)
 #====================================================ROW-2==================================================================#
 ##########################################################################################################################################
 #====================================================ROW-3==================================================================#
 
 
-Connecticut_Avenue = Button(root,text = '',command = lambda:buttons('CONNECTICUT AVENUE'),bg = 'light sky blue',fg = 'black')
+Connecticut_Avenue = Button(root,text = '',command = lambda:cards('CONNECTICUT AVENUE'),bg = 'light sky blue',fg = 'black')
 Connecticut_Avenue.place(x=427,y=631,height=20,width=46)
 
 
 
-Vermont_Avenue = Button(root,text = '',command = lambda:buttons('VERMONT AVENUE'),bg = 'light sky blue',fg = 'black')
+Vermont_Avenue = Button(root,text = '',command = lambda:cards('VERMONT AVENUE'),bg = 'light sky blue',fg = 'black')
 Vermont_Avenue.place(x=473,y=631,height=20,width=46)
 
 
 
-Oriental_Avenue = Button(root,text = '',command = lambda:buttons('ORIENTAL AVENUE'),bg = 'light sky blue',fg = 'black')
+Oriental_Avenue = Button(root,text = '',command = lambda:cards('ORIENTAL AVENUE'),bg = 'light sky blue',fg = 'black')
 Oriental_Avenue.place(x=565,y=631,height=20,width=46)
 
 
 
-Reading_Railroad = Button(root,text = '',command = lambda:buttons('READING RAILROAD'),bg = 'grey10',fg = 'black')
+Reading_Railroad = Button(root,text = '',command = lambda:cards('READING RAILROAD'),bg = 'grey10',fg = 'black')
 Reading_Railroad.place(x=611,y=631,height=20,width=46)
 
 
 
-Baltic_Avenue = Button(root,text = '',command = lambda:buttons('BALTIC AVENUE'),bg = 'saddle brown',fg = 'black')
+Baltic_Avenue = Button(root,text = '',command = lambda:cards('BALTIC AVENUE'),bg = 'saddle brown',fg = 'black')
 Baltic_Avenue.place(x=703,y=631,height=20,width=46)
 
 
 
-Mediterranean_Avenue = Button(root,text = '',command = lambda:buttons('MEDITERRANEAN AVENUE'),bg = 'saddle brown',fg = 'black')
+Mediterranean_Avenue = Button(root,text = '',command = lambda:cards('MEDITERRANEAN AVENUE'),bg = 'saddle brown',fg = 'black')
 Mediterranean_Avenue.place(x=795,y=631,height=20,width=46)
 
 
@@ -1461,32 +1501,32 @@ Mediterranean_Avenue.place(x=795,y=631,height=20,width=46)
 ######################################################################################################################################
 #================================================ROW-4==================================================================#
 #
-Pacific_Avenue = Button(root,text = '',command = lambda:buttons('PACIFIC AVENUE'),bg = 'forest green',fg = 'black')
+Pacific_Avenue = Button(root,text = '',command = lambda:cards('PACIFIC AVENUE'),bg = 'forest green',fg = 'black')
 Pacific_Avenue.place(x=916,y=142,height=46,width=20)
 
 
 
-North_Carolina_Avenue = Button(root,text = '',command = lambda:buttons('NORTH CAROLINA AVENUE'),bg = 'forest green',fg = 'black')
+North_Carolina_Avenue = Button(root,text = '',command = lambda:cards('NORTH CAROLINA AVENUE'),bg = 'forest green',fg = 'black')
 North_Carolina_Avenue.place(x=916,y=188,height=46,width=20)
 
 
 
-Pennsylvania_Avenue = Button(root,text = '',command = lambda:buttons('PENNSYLVANIA AVENUE'),bg = 'forest green',fg = 'black')
+Pennsylvania_Avenue = Button(root,text = '',command = lambda:cards('PENNSYLVANIA AVENUE'),bg = 'forest green',fg = 'black')
 Pennsylvania_Avenue.place(x=916,y=280,height=46,width=20)
 
 
 
-Short_Line = Button(root,text = '',command = lambda:buttons('SHORT LINE'),bg = 'grey10',fg = 'black')
+Short_Line = Button(root,text = '',command = lambda:cards('SHORT LINE'),bg = 'grey10',fg = 'black')
 Short_Line.place(x=916,y=326,height=46,width=20)
 
 
 
-Park_Place = Button(root,text = '',command = lambda:buttons('PARK PLACE'),bg = 'dodgerblue3',fg = 'black')
+Park_Place = Button(root,text = '',command = lambda:cards('PARK PLACE'),bg = 'dodgerblue3',fg = 'black')
 Park_Place.place(x=916,y=418,height=46,width=20)
 
 
 
-Boardwalk = Button(root,text = '',command = lambda:buttons('BOARDWALK'),bg = 'dodgerblue3',fg = 'black')
+Boardwalk = Button(root,text = '',command = lambda:cards('BOARDWALK'),bg = 'dodgerblue3',fg = 'black')
 Boardwalk.place(x=916,y=510,height=46,width=20)
 
 load = Image.open("buttons\\mortgage.png")
@@ -1696,39 +1736,36 @@ def running(button_clicks):
     global clicked
     global current_player
     global dice
-    global ch
-    if ch == 0:
-        current_player = list_of_players[button_clicks-1] 
-        #DICE
-        die1 = random.randint(1,6)
-        die2 = random.randint(1,6)
-        dice = die1 + die2
-        dice = 7
-        messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
-        DICE.place(x=5000,y=5000)
-        if current_player in prisoner:
-            turn_count += 1        
-            if 3-turn_count == 0:
-                messagebox.showinfo(current_player[0]+"'s turn!",'you are free!')
-            else:
-                messagebox.showinfo(current_player[0]+"'s turn",'you are in jail! '+str(3-turn_count)+'more turn(s)' )
-            if turn_count == 3:
-                prisoner.remove(current_player)
-                movement(current_player,dice)
-                current_player[3] += dice
 
-            run_call()
-            
-        else:        
+    current_player = list_of_players[button_clicks-1] 
+    #DICE
+    die1 = random.randint(1,6)
+    die2 = random.randint(1,6)
+    dice = die1 + die2
+    dice = 7
+    messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
+    DICE.place(x=5000,y=5000)
+    if current_player in prisoner:
+        turn_count += 1        
+        if 3-turn_count == 0:
+            messagebox.showinfo(current_player[0]+"'s turn!",'you are free!')
+        else:
+            messagebox.showinfo(current_player[0]+"'s turn",'you are in jail! '+str(3-turn_count)+'more turn(s)' )
+        if turn_count == 3:
+            prisoner.remove(current_player)
             movement(current_player,dice)
             current_player[3] += dice
+
+        run_call()
+        
+    else:        
+        movement(current_player,dice)
+        current_player[3] += dice
 
     #DICE
 #
     #PASSING GO
     #if ch == 1 or 0, then the player had just changed his location and hence we have to check if he landed on a place/property
-    if ch == 1:
-        ch = 0
     if current_player[3]>39:
         current_player[3] -=40
         messagebox.showinfo(current_player[0]+"'s turn","COLLECT 200$")
