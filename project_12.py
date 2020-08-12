@@ -1111,6 +1111,16 @@ ch = 0
 def display():
     global ch
 
+    if ch == 1:
+        if pic == 'chance2':
+            current_player[3] = 11
+        elif pic == 'chance3':
+            current_player[3] = 24
+        elif pic == 'chance4':
+            current_player[3] = 39
+        else:
+            pass 
+
     print(list_of_players)
     x=0
     y=0
@@ -1148,6 +1158,7 @@ def display():
 
     if ch == 1:
         ch = 0
+        print(current_player,'inside display')
         if current_player[3]>39:
             current_player[3] -=40
             messagebox.showinfo(current_player[0]+"'s turn","COLLECT 200$")
@@ -1316,7 +1327,7 @@ display()
 #############################################################################################################################################
 #====================================================CHANCE===================================================================#
 def chance(current_player):
-
+    global pic
     def ok():
         chance_window.destroy()
         chance_action(pic)
@@ -1344,8 +1355,10 @@ def chance(current_player):
                 dice = 39-current_player[3]+11
             else:
                 dice = 11-current_player[3]
+            #current_player[3] = 11
             movement(current_player,dice)
-            current_player[3] = 11
+            
+            
 
         elif pic == 'chance3':
             ch = 1
@@ -1354,14 +1367,17 @@ def chance(current_player):
                 dice = 39-current_player[3]+24
             else:
                 dice = 24-current_player[3] 
+            #current_player[3] = 24
             movement(current_player,dice)
-            current_player[3] = 24
+            
+            
         
-        else: 
+        elif pic == 'chance4':
             ch = 1
             dice = 39-current_player[3]
+            #current_player[3] = 39
             movement(current_player,dice)
-            current_player[3] = 39
+            
 #====================================================CHANCE======================================================================#
 ################################################################################################################################################
 #=====================================================CHEST======================================================================#
