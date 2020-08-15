@@ -1578,7 +1578,7 @@ test1 = Label(root,image=render)
 test2 = Label(root,image=render)
 test3 = Label(root,image=render) 
 
-test.place(x=335,y=558,height=46,width=14)
+#test.place(x=335,y=558,height=46,width=14)
 
 l = [[795,558],[703,558],[565,558],[473,558],[381,558],[411,524],[]]
 
