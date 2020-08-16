@@ -345,12 +345,41 @@ if k == 0:
         p1 = [players[0],money1, owned1, pos1, sets1]
         p2 = [players[1],money2, owned2, pos2, sets2]
         list_of_players = [p1,p2]
+        load = Image.open("monopoly_player_icons\\player_1.png")
+        render = ImageTk.PhotoImage(load)
+        P1 = Label(root,image=render)
+        P1.image = render
+        P1.place(x=855,y=570,height = 20,width = 20)
+
+        load = Image.open("monopoly_player_icons\\player_2.png")
+        render = ImageTk.PhotoImage(load)
+        P2 = Label(root,image=render)
+        P2.image = render
+        P2.place(x=885,y=570,height = 20,width = 20)
 
     elif len(p_name) == 3:
         p1 = [players[0],money1, owned1, pos1, sets1]
         p2 = [players[1],money2, owned2, pos2, sets2]
         p3 = [players[2],money3, owned3, pos3, sets3]
         list_of_players = [p1,p2,p3]
+        load = Image.open("monopoly_player_icons\\player_1.png")
+        render = ImageTk.PhotoImage(load)
+        P1 = Label(root,image=render)
+        P1.image = render
+        P1.place(x=855,y=570,height = 20,width = 20)
+
+        load = Image.open("monopoly_player_icons\\player_2.png")
+        render = ImageTk.PhotoImage(load)
+        P2 = Label(root,image=render)
+        P2.image = render
+        P2.place(x=885,y=570,height = 20,width = 20)
+
+        load = Image.open("monopoly_player_icons\\player_3.png")
+        render = ImageTk.PhotoImage(load)
+        P3 = Label(root,image=render)
+        P3.image = render
+        P3.place(x=855,y=600,height = 20,width = 20)
+
 
     elif len(p_name) == 4:
         p1 = [players[0],money1, owned1, pos1, sets1]
@@ -358,30 +387,30 @@ if k == 0:
         p3 = [players[2],money3, owned3, pos3, sets3]
         p4 = [players[3],money4, owned4, pos4, sets4]
         list_of_players = [p1,p2,p3,p4]
+        
+        load = Image.open("monopoly_player_icons\\player_1.png")
+        render = ImageTk.PhotoImage(load)
+        P1 = Label(root,image=render)
+        P1.image = render
+        P1.place(x=855,y=570,height = 20,width = 20)
 
-    load = Image.open("monopoly_player_icons\\player_1.png")
-    render = ImageTk.PhotoImage(load)
-    P1 = Label(root,image=render)
-    P1.image = render
-    P1.place(x=855,y=570,height = 20,width = 20)
+        load = Image.open("monopoly_player_icons\\player_2.png")
+        render = ImageTk.PhotoImage(load)
+        P2 = Label(root,image=render)
+        P2.image = render
+        P2.place(x=885,y=570,height = 20,width = 20)
 
-    load = Image.open("monopoly_player_icons\\player_2.png")
-    render = ImageTk.PhotoImage(load)
-    P2 = Label(root,image=render)
-    P2.image = render
-    P2.place(x=885,y=570,height = 20,width = 20)
+        load = Image.open("monopoly_player_icons\\player_3.png")
+        render = ImageTk.PhotoImage(load)
+        P3 = Label(root,image=render)
+        P3.image = render
+        P3.place(x=855,y=600,height = 20,width = 20)
 
-    load = Image.open("monopoly_player_icons\\player_3.png")
-    render = ImageTk.PhotoImage(load)
-    P3 = Label(root,image=render)
-    P3.image = render
-    P3.place(x=855,y=600,height = 20,width = 20)
-
-    load = Image.open("monopoly_player_icons\\player_4.png")
-    render = ImageTk.PhotoImage(load)
-    P4 = Label(root,image=render)
-    P4.image = render
-    P4.place(x=885,y=600,height = 20,width = 20)
+        load = Image.open("monopoly_player_icons\\player_4.png")
+        render = ImageTk.PhotoImage(load)
+        P4 = Label(root,image=render)
+        P4.image = render
+        P4.place(x=885,y=600,height = 20,width = 20)
 
 elif k == 1:
     property_state = []
