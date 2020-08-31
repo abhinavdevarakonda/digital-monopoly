@@ -602,8 +602,6 @@ def cards(PLACE):
                     Button(picture_popup,text = 'MORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
                 else:
                     Button(picture_popup,text = 'UNMORTGAGE',command = lambda:mortgage(owner,PLACE)).pack()
-        else:
-            image_label.after(5000,lambda:image_label.destroy())
 #====================================================PURCHASING A PROP.=========================================================================
 def purchase(PLACE,current_player):
     current_player[2].append(PLACE)
@@ -1771,7 +1769,7 @@ def jail(player):
     global turn_count
     
     messagebox.showinfo(player[0]+"'s turn",'you have landed in jail!')
-    result = messagebox.askquestion(player[0]+"'s turn","do you want to bail out?",type = 'yesno')
+    result = messagebox.askquestion(player[0]+"'s turn","Do you want to bail out of jail by paying $50 else stay in jail for 3 turns? ",type = 'yesno')
     
     if result == 'no':
         turn_count = 0
@@ -1849,7 +1847,9 @@ def running(button_clicks):
     die1 = random.randint(1,6)
     die2 = random.randint(1,6)
     dice = die1 + die2
+    #dice = 1
     dice = 7
+    #dice = 30
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     if current_player in prisoner:
