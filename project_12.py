@@ -1848,7 +1848,7 @@ def running(button_clicks):
     die2 = random.randint(1,6)
     dice = die1 + die2
     #dice = 1
-    dice = 7
+    #dice = 7
     #dice = 30
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
@@ -1927,5 +1927,3 @@ DICE = Button(root,image=dice_image,command = lambda:run_call(),bg = 'black')
 DICE.place(x = 565,y = 326)
 root.mainloop()
 #
-
-
