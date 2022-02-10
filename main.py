@@ -36,7 +36,7 @@ def home_window():
         root1.configure(bg='black')
         
     def img():
-        load=Image.open('newhome.png')
+        load=Image.open('misc/newhome.png')
         ren=ImageTk.PhotoImage(load)
         image=Label(root1,image=ren,borderwidth=0)
         image.image=ren
@@ -50,7 +50,7 @@ def home_window():
         root1.title('Homepage')
         root1.configure(bg='black')
 
-        logo=Image.open('monopolylogo.jpg')
+        logo=Image.open('misc/monopolylogo.jpg')
         ren=ImageTk.PhotoImage(logo)
         image=Label(root1,image=ren,borderwidth=0)
         image.image=ren
@@ -197,7 +197,7 @@ def home_window():
 
     def rules():
         about_window = Toplevel()
-        load=Image.open('rules.png')
+        load=Image.open('misc/rules.png')
         render=ImageTk.PhotoImage(load)
         image=Label(about_window,image=render,borderwidth=0)
         image.image=render
@@ -205,7 +205,7 @@ def home_window():
 
     def about():
         about_window = Toplevel()
-        load=Image.open('about.png')
+        load=Image.open('misc/about.png')
         render=ImageTk.PhotoImage(load)
         image=Label(about_window,image=render,borderwidth=0)
         image.image=render
@@ -239,7 +239,7 @@ root.title('                                                                    
 root.configure(bg='#36393e')
 root.geometry('1270x735')
 
-load = Image.open("monopoly_template.png")
+load = Image.open("misc/monopoly_template.png")
 render = ImageTk.PhotoImage(load)
 img = Label(root,image=render)
 img.image = render
@@ -1424,7 +1424,7 @@ def chance(current_player):
     chance_window = Toplevel()
     list_of_chances = ['chance1','chance2','chance3','chance3','chance4']
     pic = random.choice(list_of_chances)
-    load = Image.open(pic+".png")
+    load = Image.open('chance_cards/'+pic+".png")
     render = ImageTk.PhotoImage(load)
     chance_label = Label(chance_window,image=render)
     chance_label.image = render
@@ -1848,7 +1848,7 @@ def running(button_clicks):
     die2 = random.randint(1,6)
     dice = die1 + die2
     #dice = 1
-    #dice = 7
+    dice = 7
     #dice = 30
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
@@ -1922,7 +1922,7 @@ def running(button_clicks):
 #running()
 #===============================================RUNNING=================================================================#
 
-dice_image = ImageTk.PhotoImage(file = 'dice_image.png')
+dice_image = ImageTk.PhotoImage(file = 'misc/dice_image.png')
 DICE = Button(root,image=dice_image,command = lambda:run_call(),bg = 'black')
 DICE.place(x = 565,y = 326)
 root.mainloop()
