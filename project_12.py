@@ -1849,7 +1849,7 @@ def running(button_clicks):
     dice = die1 + die2
     #dice = 1
     #dice = 7
-    dice = 30
+    #dice = 30
     messagebox.showinfo(current_player[0]+"'s turn","You rolled a "+str(dice))
     DICE.place(x=5000,y=5000)
     if current_player in prisoner:
